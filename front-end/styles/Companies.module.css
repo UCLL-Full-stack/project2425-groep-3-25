@@ -1,0 +1,95 @@
+.companyPage {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(180deg, #ffffff, #f0f0ff);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  color: #000000;
+}
+
+.companyTitle {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  color: #000000;
+  text-align: center;
+  margin-top: 50px;
+}
+
+.companyDescription {
+  margin-left: 80px;
+  font-size: 1.2rem;
+  color: #000000;
+  text-align: center;
+  margin-bottom: 3rem;
+  max-width: 800px;
+}
+
+/* Grid Layout */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 2rem;
+}
+
+/* Card Styling */
+.card {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  transition: transform 0.3s, box-shadow 0.3s;
+  color: #000000;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.cardTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #000000;
+}
+
+.cardText {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #333333;
+}
+
+.partnerButton {
+  background-color: #4a00e0;
+  color: #ffffff;
+  border: none;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  align-items: center;
+}
+
+.partnerButton:hover {
+  background-color: #8e2de2;
+  transform: scale(1.05);
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 2rem; 
+}
+

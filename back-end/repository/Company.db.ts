@@ -21,6 +21,34 @@ export class CompanyRepository {
                 contact_informatie: 'contact@companyb.com',
                 projects: [],
             }),
+            new Company({
+                id: 3,
+                naam: 'Company C',
+                locatie: 'Location C',
+                contact_informatie: 'contact@companyc.com',
+                projects: [],
+            }),
+            new Company({
+                id: 4,
+                naam: 'Company D',
+                locatie: 'Location D',
+                contact_informatie: 'contact@companyd.com',
+                projects: [],
+            }),
+            new Company({
+                id: 5,
+                naam: 'Company E',
+                locatie: 'Location E',
+                contact_informatie: 'contact@companye.com',
+                projects: [],
+            }),
+            new Company({
+                id: 6,
+                naam: 'Company F',
+                locatie: 'Location F',
+                contact_informatie: 'contact@companyf.com',
+                projects: [],
+            }),
         ];
     }
 
