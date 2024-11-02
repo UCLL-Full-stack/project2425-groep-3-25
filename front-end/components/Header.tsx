@@ -20,10 +20,10 @@ const Header: React.FC = () => {
               <Link href="/companies">Companies</Link>
             </li>
             <li>
-              <Link href="/my-company">My Company</Link>
+              <Link href="/myCompany">My Company</Link>
             </li>
             <li>
-              <Link href="/people">Employees</Link>
+              <Link href="/employees">Employees</Link>
             </li>
           </ul>
         </nav>

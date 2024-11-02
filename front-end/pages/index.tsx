@@ -24,7 +24,7 @@ const HomePage: React.FC = () => {
 
         <main className={styles.main}>
           <section className={styles.heroSection}>
-            <h1 className={styles.heroTitle}>Welcome to Project Showcase</h1>
+            <h1 className={styles.heroTitle}>Welcome to ProjectShowcase</h1>
           </section>
 
           <section className={styles.infoSection}>
