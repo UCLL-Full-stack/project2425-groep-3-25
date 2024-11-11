@@ -1,69 +1,84 @@
-/* Projects.module.css */
-
 .projectPage {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(180deg, #ffffff, #f0f0ff);
+  background: linear-gradient(180deg, #111827, #1e293b);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* padding: 2rem; */
+  color: #ffffff;
+  margin-top: 80px;
 }
 
-.title {
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #4a00e0;
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 2rem;
+}
+
+.hero {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
+}
+
+.heroTitle {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #407ace;
+  margin-bottom: 1rem;
+}
+
+.heroSubtitle {
+  font-size: 1.2rem;
+  color: #e0e0e0;
+  max-width: 600px;
 }
 
 .projectForm {
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 600px;
   width: 100%;
-  margin-bottom: 3rem;
-  padding: 1.5rem;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin-bottom: 4rem;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.projectForm input,
-.projectForm textarea {
+.inputField {
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.8rem;
   margin-bottom: 1rem;
-  border: 1px solid #ccc;
+  border: none;
   border-radius: 8px;
   font-size: 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
 }
 
-.projectForm textarea {
-  resize: vertical;
-  height: 100px;
+.inputField::placeholder {
+  color: #cccccc;
 }
 
-.projectForm button {
-  background-color: #4a00e0;
-  color: #fff;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
+.submitButton {
+  background-color: #407ace; 
+  color: #ffffff;
+  padding: 0.8rem 1.5rem;
+  font-size: 1.1rem;
   font-weight: bold;
   border: none;
-  border-radius: 30px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 100%;
-  max-width: 200px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 10px rgba(64, 122, 206, 0.5); 
 }
 
-.projectForm button:hover {
-  background-color: #8e2de2;
-  transform: scale(1.05);
+.submitButton:hover {
+  background-color: #365d9e; 
 }
 
 .projectGrid {
@@ -75,26 +90,23 @@
 }
 
 .projectCard {
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
   padding: 1.5rem;
-  border-radius: 15px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  transition: transform 0.3s, box-shadow 0.3s;
-  color: #333333;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  color: #ffffff;
 }
 
 .projectCard:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
 }
 
 .projectCard h2 {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #4a00e0;
+  font-size: 1.6rem;
+  color: #407ace; 
   margin-bottom: 0.5rem;
 }
 
@@ -102,7 +114,7 @@
   font-size: 1rem;
   line-height: 1.5;
   margin-bottom: 1rem;
-  color: #666666;
+  color: #e0e0e0;
 }
 
 .projectCard button {
@@ -110,16 +122,16 @@
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
   font-weight: bold;
-  color: #4a00e0;
+  color: #407ace; 
   background: transparent;
-  border: 2px solid #4a00e0;
+  border: 2px solid #407ace; 
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s, transform 0.2s;
 }
 
 .projectCard button:hover {
-  background-color: #4a00e0;
+  background-color: #407ace; 
   color: #ffffff;
   transform: scale(1.05);
 }

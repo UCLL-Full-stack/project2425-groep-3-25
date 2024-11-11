@@ -1,33 +1,58 @@
 .companyPage {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(180deg, #ffffff, #f0f0ff);
+  background: linear-gradient(180deg, #111827, #1e293b);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  color: #000000;
+  color: #ffffff;
+  margin-top: 80px;
 }
 
 .companyTitle {
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: bold;
-  margin-bottom: 2rem;
-  color: #000000;
+  margin-bottom: 1.5rem;
+  color: #407ace;
   text-align: center;
   margin-top: 50px;
 }
 
 .companyDescription {
-  margin-left: 80px;
   font-size: 1.2rem;
-  color: #000000;
+  color: #e0e0e0;
   text-align: center;
   margin-bottom: 3rem;
   max-width: 800px;
+  margin-left: 80px;
 }
 
-/* Grid Layout */
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.partnerButton {
+  background-color: #407ace;
+  color: #ffffff;
+  border: none;
+  padding: 0.8rem 1.8rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(64, 122, 206, 0.5);
+}
+
+.partnerButton:hover {
+  background-color: #365d9e;
+  transform: scale(1.05);
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -37,59 +62,31 @@
   margin-top: 2rem;
 }
 
-/* Card Styling */
 .card {
-  background: #ffffff;
-  padding: 2rem;
-  border-radius: 15px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   text-align: left;
-  transition: transform 0.3s, box-shadow 0.3s;
-  color: #000000;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  color: #ffffff;
+  backdrop-filter: blur(8px);
 }
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
 }
 
 .cardTitle {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: bold;
-  margin-bottom: 1rem;
-  color: #000000;
+  margin-bottom: 0.5rem;
+  color: #407ace;
 }
 
 .cardText {
   font-size: 1rem;
   line-height: 1.5;
-  color: #333333;
+  color: #e0e0e0;
 }
-
-.partnerButton {
-  background-color: #4a00e0;
-  color: #ffffff;
-  border: none;
-  padding: 0.75rem 2rem;
-  font-size: 1rem;
-  font-weight: bold;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  align-items: center;
-}
-
-.partnerButton:hover {
-  background-color: #8e2de2;
-  transform: scale(1.05);
-}
-
-.buttonContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin-top: 2rem; 
-}
-

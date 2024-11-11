@@ -1,5 +1,3 @@
-// pages/companies.tsx
-
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import Header from "../../components/Header";
@@ -7,8 +5,8 @@ import CompanyCard from "../../components/CompanyCard";
 import PartnerApplicationForm from "../../components/PartnerApplicationForm";
 import { fetchCompanies } from "@/services/CompanySerice";
 import styles from "@/styles/Companies.module.css";
+import Footer from "@/components/Footer";
 
-// Define the Company type
 interface Company {
   id: number;
   naam: string;
@@ -26,7 +24,6 @@ const CompaniesPage: React.FC = () => {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Fetch companies from the API when the component loads
   useEffect(() => {
     const loadCompanies = async () => {
       try {
@@ -39,18 +36,16 @@ const CompaniesPage: React.FC = () => {
     loadCompanies();
   }, []);
 
-  // Function to handle the modal opening
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  // Function to add a new company to the list
   const handleCompanyCreated = (
     companyInput: Omit<Company, "id" | "projects">
   ) => {
     const newCompany: Company = {
-      id: companies.length + 1, // Temporary ID, replace with real ID if possible
+      id: companies.length + 1,
       ...companyInput,
-      projects: [], // Assume new companies have no projects initially
+      projects: [],
     };
     setCompanies((prevCompanies) => [...prevCompanies, newCompany]);
   };
@@ -81,7 +76,6 @@ const CompaniesPage: React.FC = () => {
             </button>
           </div>
 
-          {/* Conditionally render the modal */}
           {isModalOpen && (
             <PartnerApplicationForm
               closeModal={closeModal}
@@ -95,6 +89,7 @@ const CompaniesPage: React.FC = () => {
             ))}
           </div>
         </main>
+        <Footer />
       </div>
     </>
   );

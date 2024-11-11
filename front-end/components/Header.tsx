@@ -1,13 +1,27 @@
-// components/Header.tsx
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import styles from "../styles/Header.module.css";
+import LoginPopUp from "@/components/LoginPopUp";
 
 const Header: React.FC = () => {
+  const [isLoginPopUpOpen, setIsLoginPopUpOpen] = useState(false);
+
+  const handleOpenLoginPopUp = () => {
+    setIsLoginPopUpOpen(true);
+  };
+
+  const handleCloseLoginPopUp = () => {
+    setIsLoginPopUpOpen(false);
+  };
+
+  const handleLogin = (username: string, password: string) => {
+    console.log("Logging in with", username, password);
+  };
+
   return (
     <header className={styles.header}>
       <div className={styles.headerContent}>
-        <h1>ProjectShowcase</h1>
+        <h1 className={styles.logo}>ProjectShowcase</h1>
         <nav>
           <ul className={styles.navList}>
             <li>
@@ -27,8 +41,18 @@ const Header: React.FC = () => {
             </li>
           </ul>
         </nav>
-        <button className={styles.contactButton}>Log in</button>
+        <button className={styles.contactButton} onClick={handleOpenLoginPopUp}>
+          Log in
+        </button>
       </div>
+
+      <LoginPopUp
+        isOpen={isLoginPopUpOpen}
+        onClose={handleCloseLoginPopUp}
+        onLogin={handleLogin}
+        title="Inloggen"
+        description="Vul uw gegevens in om in te loggen."
+      />
     </header>
   );
 };

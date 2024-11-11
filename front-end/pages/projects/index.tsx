@@ -6,12 +6,11 @@ import Header from "../../components/Header";
 import {
   fetchProjects,
   createProject,
-  updateProject,
-  deleteProject,
   Project,
   ProjectInput,
 } from "@/services/ProjectService";
 import styles from "@/styles/Project.module.css";
+import Footer from "@/components/Footer";
 
 const ProjectsPage: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -20,7 +19,6 @@ const ProjectsPage: React.FC = () => {
     beschrijving: "",
     datum_voltooid: "",
   });
-  const [isEditing, setIsEditing] = useState<number | null>(null);
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -52,41 +50,6 @@ const ProjectsPage: React.FC = () => {
     }
   };
 
-//   const handleEditProject = (project: Project) => {
-//     setIsEditing(project.id);
-//     setNewProject({
-//       naam: project.naam,
-//       beschrijving: project.beschrijving,
-//       datum_voltooid: project.datum_voltooid,
-//     });
-//   };
-
-//   const handleUpdateProject = async () => {
-//     if (isEditing === null) return;
-
-//     try {
-//       const updatedProject = await updateProject(isEditing, newProject);
-//       setProjects((prev) =>
-//         prev.map((project) =>
-//           project.id === isEditing ? updatedProject : project
-//         )
-//       );
-//       setIsEditing(null);
-//       setNewProject({ naam: "", beschrijving: "", datum_voltooid: "" });
-//     } catch (error) {
-//       console.error("Error updating project:", error);
-//     }
-//   };
-
-  const handleDeleteProject = async (id: number) => {
-    try {
-      await deleteProject(id);
-      setProjects((prev) => prev.filter((project) => project.id !== id));
-    } catch (error) {
-      console.error("Error deleting project:", error);
-    }
-  };
-
   return (
     <>
       <Head>
@@ -95,9 +58,14 @@ const ProjectsPage: React.FC = () => {
 
       <div className={styles.projectPage}>
         <Header />
-
-        <main>
-          <h1 className={styles.title}>Our Projects</h1>
+        <main className={styles.main}>
+          <section className={styles.hero}>
+            <h1 className={styles.heroTitle}>Our Projects</h1>
+            <p className={styles.heroSubtitle}>
+              Explore our collaborative projects and join us in making a
+              difference.
+            </p>
+          </section>
 
           <div className={styles.projectForm}>
             <input
@@ -107,6 +75,7 @@ const ProjectsPage: React.FC = () => {
               onChange={handleInputChange}
               placeholder="Project Name"
               required
+              className={styles.inputField}
             />
             <textarea
               name="beschrijving"
@@ -114,6 +83,7 @@ const ProjectsPage: React.FC = () => {
               onChange={handleInputChange}
               placeholder="Description"
               required
+              className={styles.inputField}
             />
             <input
               type="date"
@@ -121,13 +91,11 @@ const ProjectsPage: React.FC = () => {
               value={newProject.datum_voltooid}
               onChange={handleInputChange}
               required
+              className={styles.inputField}
             />
-{/* 
-            {isEditing ? (
-              <button onClick={handleUpdateProject}>Update Project</button>
-            ) : (
-              <button onClick={handleAddProject}>Add Project</button>
-            )} */}
+            <button onClick={handleAddProject} className={styles.submitButton}>
+              Add Project
+            </button>
           </div>
 
           <div className={styles.projectGrid}>
@@ -136,14 +104,11 @@ const ProjectsPage: React.FC = () => {
                 <h2>{project.naam}</h2>
                 <p>{project.beschrijving}</p>
                 <p>Completion Date: {project.datum_voltooid}</p>
-                {/* <button onClick={() => handleEditProject(project)}>Edit</button>
-                <button onClick={() => handleDeleteProject(project.id)}> */}
-                  {/* Delete */}
-                {/* </button> */}
               </div>
             ))}
           </div>
         </main>
+        <Footer />
       </div>
     </>
   );
