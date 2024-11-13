@@ -1,0 +1,81 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Company {
+  id                 Int        @id @default(autoincrement())
+  naam               String
+  locatie            String
+  contact_informatie String
+  employees          Employee[] @relation("CompanyEmployees")
+  projects           Project[]
+
+  @@map("Company")
+}
+
+enum Role {
+  Admin
+  User
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String
+  email    String @unique
+  role     Role
+}
+
+model Employee {
+  id                Int                @id @default(autoincrement())
+  bedrijf_id        Int
+  naam              String
+  email             String             @unique
+  telefoonnummer    String
+  company           Company            @relation("CompanyEmployees", fields: [bedrijf_id], references: [id])
+  employeeProjects  Employee_Project[]
+
+  @@map("Employee")
+}
+
+model Category {
+  id           Int       @id @default(autoincrement())
+  naam         String
+  beschrijving String
+  projects     Project[]
+
+  @@map("Category")
+}
+
+model Project {
+  id             Int                @id @default(autoincrement())
+  bedrijf_id     Int
+  categorie_id   Int
+  naam           String
+  beschrijving   String
+  datum_voltooid DateTime
+  company        Company            @relation(fields: [bedrijf_id], references: [id])
+  category       Category           @relation(fields: [categorie_id], references: [id])
+  employeeProjects Employee_Project[]
+
+  @@map("Project")
+}
+
+model Employee_Project {
+  employee_id Int
+  project_id  Int
+  rol         String
+
+  employee    Employee @relation(fields: [employee_id], references: [id])
+  project     Project  @relation(fields: [project_id], references: [id])
+
+  @@id([employee_id, project_id])
+  @@map("Employee_Project")
+}

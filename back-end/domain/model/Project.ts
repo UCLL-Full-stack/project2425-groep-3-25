@@ -1,3 +1,5 @@
+import { Project as ProjectPrisma } from '@prisma/client';
+
 export class Project {
     readonly id: number;
     readonly naam: string;
@@ -6,7 +8,6 @@ export class Project {
 
     constructor(project: { id: number; naam: string; beschrijving: string; datum_voltooid: Date }) {
         this.validate(project);
-
         this.id = project.id;
         this.naam = project.naam;
         this.beschrijving = project.beschrijving;
@@ -22,5 +23,15 @@ export class Project {
         if (!project.naam?.trim() || !project.beschrijving?.trim() || !project.datum_voltooid) {
             throw new Error('All fields are required.');
         }
+    }
+
+    // Convert Prisma data to a Project instance
+    static from(data: ProjectPrisma): Project {
+        return new Project({
+            id: data.id,
+            naam: data.naam,
+            beschrijving: data.beschrijving,
+            datum_voltooid: data.datum_voltooid,
+        });
     }
 }

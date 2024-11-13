@@ -1,113 +1,89 @@
+import { PrismaClient } from '@prisma/client';
 import { Company } from '../domain/model/Company';
 import { CompanyInput } from '../types';
 import { Project } from '../domain/model/Project';
 
+const prisma = new PrismaClient();
+
 export class CompanyRepository {
-    private companies: Company[] = [];
-
-    constructor() {
-        this.companies = [
-            new Company({
-                id: 1,
-                naam: 'Company A',
-                locatie: 'Location A',
-                contact_informatie: 'contact@companya.com',
-                projects: [],
-            }),
-            new Company({
-                id: 2,
-                naam: 'Company B',
-                locatie: 'Location B',
-                contact_informatie: 'contact@companyb.com',
-                projects: [],
-            }),
-            new Company({
-                id: 3,
-                naam: 'Company C',
-                locatie: 'Location C',
-                contact_informatie: 'contact@companyc.com',
-                projects: [],
-            }),
-            new Company({
-                id: 4,
-                naam: 'Company D',
-                locatie: 'Location D',
-                contact_informatie: 'contact@companyd.com',
-                projects: [],
-            }),
-            new Company({
-                id: 5,
-                naam: 'Company E',
-                locatie: 'Location E',
-                contact_informatie: 'contact@companye.com',
-                projects: [],
-            }),
-            new Company({
-                id: 6,
-                naam: 'Company F',
-                locatie: 'Location F',
-                contact_informatie: 'contact@companyf.com',
-                projects: [],
-            }),
-        ];
-    }
-
-    create(companyData: CompanyInput): Company {
-        const newCompany = new Company({
-            id: this.generateId(),
-            naam: companyData.naam || '',
-            locatie: companyData.locatie || '',
-            contact_informatie: companyData.contact_informatie || '',
-        });
-        this.companies.push(newCompany);
-        return newCompany;
-    }
-
-    findById(id: number): Company | undefined {
-        return this.companies.find((company) => company.id === id);
-    }
-
-    findAll(): Company[] {
-        return this.companies;
-    }
-
-    update(id: number, updatedData: Partial<CompanyInput>): Company | undefined {
-        const company = this.findById(id);
-        if (!company) {
-            return undefined;
-        }
-
-        const updatedCompany = new Company({
-            ...company,
-            ...updatedData,
-            id: company.id,
-            projects: updatedData.projects
-                ? updatedData.projects.map(
-                      (projectInput) =>
-                          new Project({
-                              id: projectInput.id ?? this.generateProjectId(),
-                              naam: projectInput.naam!,
-                              beschrijving: projectInput.beschrijving!,
-                              datum_voltooid: projectInput.datum_voltooid!,
-                          })
-                  )
-                : company.projects,
+    // Create a new company in the database
+    async create(companyData: CompanyInput): Promise<Company> {
+        const newCompany = await prisma.company.create({
+            data: {
+                naam: companyData.naam || '',
+                locatie: companyData.locatie || '',
+                contact_informatie: companyData.contact_informatie || '',
+                projects: {
+                    create:
+                        companyData.projects?.map((project) => ({
+                            naam: project.naam || '',
+                            beschrijving: project.beschrijving || '',
+                            datum_voltooid: project.datum_voltooid || new Date(),
+                            category: {
+                                connect: { id: project.category_id }, // Connect the project to an existing category by ID
+                            },
+                        })) || [],
+                },
+            },
+            include: { projects: true }, // Include related projects in the result
         });
 
-        this.companies = this.companies.map((c) => (c.id === id ? updatedCompany : c));
-        return updatedCompany;
+        return Company.from(newCompany); // Convert Prisma object to domain model
     }
 
-    private generateProjectId(): number {
-        const allProjects = this.companies.flatMap((company) => company.projects);
-        return allProjects.length > 0 ? Math.max(...allProjects.map((p) => p.id)) + 1 : 1;
+    // Find a company by its ID
+    async findById(id: number): Promise<Company | undefined> {
+        const companyData = await prisma.company.findUnique({
+            where: { id },
+            include: { projects: true },
+        });
+
+        return companyData ? Company.from(companyData) : undefined;
     }
 
-    delete(id: number): void {
-        this.companies = this.companies.filter((company) => company.id !== id);
+    // Retrieve all companies from the database
+    async findAll(): Promise<Company[]> {
+        const companiesData = await prisma.company.findMany({
+            include: { projects: true },
+        });
+
+        return companiesData.map((company) => Company.from(company));
     }
 
-    private generateId(): number {
-        return this.companies.length > 0 ? Math.max(...this.companies.map((c) => c.id)) + 1 : 1;
+    // Update a company in the database
+    async update(id: number, updatedData: Partial<CompanyInput>): Promise<Company | undefined> {
+        const companyExists = await prisma.company.findUnique({ where: { id } });
+        if (!companyExists) return undefined;
+
+        const updatedCompanyData = await prisma.company.update({
+            where: { id },
+            data: {
+                naam: updatedData.naam,
+                locatie: updatedData.locatie,
+                contact_informatie: updatedData.contact_informatie,
+                projects: {
+                    deleteMany: {}, // Clear existing projects before updating
+                    create:
+                        updatedData.projects?.map((project) => ({
+                            naam: project.naam,
+                            beschrijving: project.beschrijving,
+                            datum_voltooid: project.datum_voltooid || new Date(),
+                            category: {
+                                connect: { id: project.category_id }, // Connect the project to an existing category by ID
+                            },
+                        })) || [],
+                },
+            },
+            include: { projects: true }, // Include projects in the updated data
+        });
+
+        return Company.from(updatedCompanyData);
+    }
+
+    // Delete a company from the database
+    async delete(id: number): Promise<void> {
+        await prisma.company.delete({
+            where: { id },
+        });
     }
 }

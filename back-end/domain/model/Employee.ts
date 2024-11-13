@@ -1,3 +1,5 @@
+import { Employee as EmployeePrisma } from '@prisma/client';
+
 export class Employee {
     readonly id: number;
     readonly naam: string;
@@ -30,5 +32,15 @@ export class Employee {
     private validateEmail(email: string): boolean {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(email);
+    }
+
+    // Static from method to convert Prisma object to domain model
+    static from(data: EmployeePrisma): Employee {
+        return new Employee({
+            id: data.id,
+            naam: data.naam,
+            email: data.email,
+            telefoonnummer: data.telefoonnummer,
+        });
     }
 }

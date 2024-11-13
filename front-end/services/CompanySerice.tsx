@@ -23,10 +23,12 @@ export const createCompany = async (companyData: CompanyInput) => {
   return await response.json();
 };
 
-export const fetchCompanies = async () => {
+export const fetchCompanies = async (): Promise<CompanyInput[]> => {
   const response = await fetch("http://localhost:3000/api/companies");
   if (!response.ok) {
     throw new Error("Failed to fetch companies");
   }
-  return await response.json();
+
+  const data = await response.json();
+  return Array.isArray(data) ? data : []; // Ensures data is an array
 };

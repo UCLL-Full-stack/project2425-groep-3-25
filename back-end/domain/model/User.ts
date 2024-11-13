@@ -1,4 +1,4 @@
-import { Role } from '../../types';
+import { User as UserPrisma, Role } from '@prisma/client';
 
 export class User {
     readonly id: number;
@@ -52,25 +52,14 @@ export class User {
         }
     }
 
-    static from({
-        id,
-        username,
-        password,
-        email,
-        role,
-    }: {
-        id: number;
-        username: string;
-        password: string;
-        email: string;
-        role: Role;
-    }) {
+    // Static from method to convert Prisma object to domain model
+    static from(data: UserPrisma): User {
         return new User({
-            id,
-            username,
-            password,
-            email,
-            role: role as Role,
+            id: data.id,
+            username: data.username,
+            password: data.password,
+            email: data.email,
+            role: data.role,
         });
     }
 }

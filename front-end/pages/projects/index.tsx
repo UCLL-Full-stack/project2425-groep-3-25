@@ -19,6 +19,7 @@ const ProjectsPage: React.FC = () => {
     beschrijving: "",
     datum_voltooid: "",
   });
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -27,6 +28,7 @@ const ProjectsPage: React.FC = () => {
         setProjects(data);
       } catch (error) {
         console.error("Error fetching projects:", error);
+        setError("Failed to load projects. Please try again later.");
       }
     };
 
@@ -41,12 +43,23 @@ const ProjectsPage: React.FC = () => {
   };
 
   const handleAddProject = async () => {
+    if (
+      !newProject.naam ||
+      !newProject.beschrijving ||
+      !newProject.datum_voltooid
+    ) {
+      setError("All fields are required.");
+      return;
+    }
+
     try {
       const addedProject = await createProject(newProject);
       setProjects((prev) => [...prev, addedProject]);
       setNewProject({ naam: "", beschrijving: "", datum_voltooid: "" });
+      setError(null);
     } catch (error) {
       console.error("Error adding project:", error);
+      setError("Failed to add project. Please try again.");
     }
   };
 
@@ -68,6 +81,7 @@ const ProjectsPage: React.FC = () => {
           </section>
 
           <div className={styles.projectForm}>
+            {error && <p className={styles.errorText}>{error}</p>}
             <input
               type="text"
               name="naam"
@@ -103,7 +117,10 @@ const ProjectsPage: React.FC = () => {
               <div key={project.id} className={styles.projectCard}>
                 <h2>{project.naam}</h2>
                 <p>{project.beschrijving}</p>
-                <p>Completion Date: {project.datum_voltooid}</p>
+                <p>
+                  Completion Date:{" "}
+                  {new Date(project.datum_voltooid).toLocaleDateString()}
+                </p>
               </div>
             ))}
           </div>

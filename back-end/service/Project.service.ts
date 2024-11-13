@@ -9,26 +9,29 @@ export class ProjectService {
         this.projectRepository = projectRepository;
     }
 
-    createProject(projectData: ProjectInput): Project {
+    async createProject(projectData: ProjectInput): Promise<Project> {
         this.validateProjectData(projectData);
-        return this.projectRepository.create(projectData);
+        return await this.projectRepository.create(projectData);
     }
 
-    getProjectById(id: number): Project | undefined {
-        return this.projectRepository.findById(id);
+    async getProjectById(id: number): Promise<Project | undefined> {
+        return await this.projectRepository.findById(id);
     }
 
-    listProjects(): Project[] {
-        return this.projectRepository.findAll();
+    async listProjects(): Promise<Project[]> {
+        return await this.projectRepository.findAll();
     }
 
-    updateProject(id: number, updatedData: Partial<ProjectInput>): Project | undefined {
+    async updateProject(
+        id: number,
+        updatedData: Partial<ProjectInput>
+    ): Promise<Project | undefined> {
         this.validateProjectData(updatedData as ProjectInput);
-        return this.projectRepository.update(id, updatedData);
+        return await this.projectRepository.update(id, updatedData);
     }
 
-    deleteProject(id: number): void {
-        this.projectRepository.delete(id);
+    async deleteProject(id: number): Promise<void> {
+        await this.projectRepository.delete(id);
     }
 
     private validateProjectData(projectData: ProjectInput): void {

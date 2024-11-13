@@ -1,4 +1,5 @@
 import { Project } from './Project';
+import { Company as CompanyPrisma, Project as ProjectPrisma } from '@prisma/client';
 
 export class Company {
     readonly id: number;
@@ -15,7 +16,6 @@ export class Company {
         projects?: Project[];
     }) {
         this.validate(company);
-
         this.id = company.id;
         this.naam = company.naam;
         this.locatie = company.locatie;
@@ -36,5 +36,16 @@ export class Company {
         ) {
             throw new Error('All fields are required.');
         }
+    }
+
+    // Convert Prisma data to a Company instance
+    static from(data: CompanyPrisma & { projects: ProjectPrisma[] }): Company {
+        return new Company({
+            id: data.id,
+            naam: data.naam,
+            locatie: data.locatie,
+            contact_informatie: data.contact_informatie,
+            projects: data.projects.map(Project.from),
+        });
     }
 }

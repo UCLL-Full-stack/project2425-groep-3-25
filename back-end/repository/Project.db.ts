@@ -1,67 +1,68 @@
+import { PrismaClient } from '@prisma/client';
 import { Project } from '../domain/model/Project';
 import { ProjectInput } from '../types';
 
+const prisma = new PrismaClient();
+
 export class ProjectRepository {
-    private projects: Project[] = [];
-
-    constructor() {
-        // Voeg hier dummy data toe voor testdoeleinden
-        this.projects = [
-            new Project({
-                id: 1,
-                naam: 'Project A',
-                beschrijving: 'Description of Project A',
-                datum_voltooid: new Date('2023-01-01'),
-            }),
-            new Project({
-                id: 2,
-                naam: 'Project B',
-                beschrijving: 'Description of Project B',
-                datum_voltooid: new Date('2023-02-01'),
-            }),
-        ];
-    }
-
-    create(projectData: ProjectInput): Project {
-        const newProject = new Project({
-            id: this.generateId(),
-            naam: projectData.naam || 'Default Naam',
-            beschrijving: projectData.beschrijving || 'Default Beschrijving',
-            datum_voltooid: projectData.datum_voltooid || new Date(),
+    // Create a new project in the database
+    async create(projectData: ProjectInput): Promise<Project> {
+        const newProjectData = await prisma.project.create({
+            data: {
+                naam: projectData.naam || 'Default Naam',
+                beschrijving: projectData.beschrijving || 'Default Beschrijving',
+                datum_voltooid: projectData.datum_voltooid || new Date(),
+                company: {
+                    connect: { id: projectData.company_id }, // Connect to an existing Company by ID
+                },
+                category: {
+                    connect: { id: projectData.category_id }, // Connect to an existing Category by ID
+                },
+            },
         });
-        this.projects.push(newProject);
-        return newProject;
+        return Project.from(newProjectData); // Convert Prisma object to domain model
     }
 
-    findById(id: number): Project | undefined {
-        return this.projects.find((project) => project.id === id);
-    }
-
-    findAll(): Project[] {
-        return this.projects;
-    }
-
-    update(id: number, updatedData: Partial<ProjectInput>): Project | undefined {
-        const project = this.findById(id);
-        if (!project) {
-            return undefined;
-        }
-
-        const updatedProject = new Project({
-            ...project,
-            ...updatedData,
-            id: project.id, // Zorg ervoor dat de id hetzelfde blijft
+    // Find a project by its ID
+    async findById(id: number): Promise<Project | undefined> {
+        const projectData = await prisma.project.findUnique({
+            where: { id },
         });
-
-        this.projects = this.projects.map((p) => (p.id === id ? updatedProject : p));
-        return updatedProject;
+        return projectData ? Project.from(projectData) : undefined;
     }
 
-    delete(id: number): void {
-        this.projects = this.projects.filter((project) => project.id !== id);
+    // Retrieve all projects from the database
+    async findAll(): Promise<Project[]> {
+        const projectsData = await prisma.project.findMany();
+        return projectsData.map((project) => Project.from(project));
     }
 
-    private generateId(): number {
-        return this.projects.length > 0 ? Math.max(...this.projects.map((p) => p.id)) + 1 : 1;
+    // Update a project in the database
+    async update(id: number, updatedData: Partial<ProjectInput>): Promise<Project | undefined> {
+        const projectExists = await prisma.project.findUnique({ where: { id } });
+        if (!projectExists) return undefined;
+
+        const updatedProjectData = await prisma.project.update({
+            where: { id },
+            data: {
+                naam: updatedData.naam,
+                beschrijving: updatedData.beschrijving,
+                datum_voltooid: updatedData.datum_voltooid,
+                company: updatedData.company_id
+                    ? { connect: { id: updatedData.company_id } }
+                    : undefined,
+                category: updatedData.category_id
+                    ? { connect: { id: updatedData.category_id } }
+                    : undefined,
+            },
+        });
+        return Project.from(updatedProjectData);
+    }
+
+    // Delete a project from the database
+    async delete(id: number): Promise<void> {
+        await prisma.project.delete({
+            where: { id },
+        });
     }
 }
