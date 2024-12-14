@@ -1,68 +1,114 @@
 import { PrismaClient } from '@prisma/client';
 import { Project } from '../domain/model/Project';
 import { ProjectInput } from '../types';
+import company from '../domain/model/Company'
 
 const prisma = new PrismaClient();
 
-export class ProjectRepository {
-    // Create a new project in the database
-    async create(projectData: ProjectInput): Promise<Project> {
-        const newProjectData = await prisma.project.create({
-            data: {
-                naam: projectData.naam || 'Default Naam',
-                beschrijving: projectData.beschrijving || 'Default Beschrijving',
-                datum_voltooid: projectData.datum_voltooid || new Date(),
-                company: {
-                    connect: { id: projectData.company_id }, // Connect to an existing Company by ID
-                },
-                category: {
-                    connect: { id: projectData.category_id }, // Connect to an existing Category by ID
-                },
-            },
-        });
-        return Project.from(newProjectData); // Convert Prisma object to domain model
-    }
+const createProject = async ({
+  naam,
+  beschrijving,
+  datum_voltooid,
+  company_id,
+  category_id,
+}: ProjectInput): Promise<Project> => {
+  try {
+    const newProject = await prisma.project.create({
+      data: {
+        naam: naam || 'Default Naam',
+        beschrijving: beschrijving || 'Default Beschrijving',
+        datum_voltooid: datum_voltooid || new Date(),
+        company: {
+          connect: { id: company_id },
+        },
+        category: {
+          connect: { id: category_id },
+        },
+      },
+    });
+    return Project.from(newProject);
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while creating the project');
+  }
+};
 
-    // Find a project by its ID
-    async findById(id: number): Promise<Project | undefined> {
-        const projectData = await prisma.project.findUnique({
-            where: { id },
-        });
-        return projectData ? Project.from(projectData) : undefined;
-    }
+const getProjectById = async ({
+  id,
+}: {
+  id: number;
+}): Promise<Project | null> => {
+  try {
+    const project = await prisma.project.findUnique({
+      where: { id },
+    });
+    return project ? Project.from(project) : null;
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while finding the project by ID');
+  }
+};
 
-    // Retrieve all projects from the database
-    async findAll(): Promise<Project[]> {
-        const projectsData = await prisma.project.findMany();
-        return projectsData.map((project) => Project.from(project));
-    }
+const getAllProjects = async (): Promise<Project[]> => {
+  try {
+    const projects = await prisma.project.findMany();
+    return projects.map(Project.from);
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while retrieving all projects');
+  }
+};
 
-    // Update a project in the database
-    async update(id: number, updatedData: Partial<ProjectInput>): Promise<Project | undefined> {
-        const projectExists = await prisma.project.findUnique({ where: { id } });
-        if (!projectExists) return undefined;
+const updateProject = async (
+  id: number,
+  updatedData: Partial<ProjectInput>
+): Promise<Project | null> => {
+  try {
+    const projectExists = await prisma.project.findUnique({
+      where: { id },
+    });
+    if (!projectExists) return null;
 
-        const updatedProjectData = await prisma.project.update({
-            where: { id },
-            data: {
-                naam: updatedData.naam,
-                beschrijving: updatedData.beschrijving,
-                datum_voltooid: updatedData.datum_voltooid,
-                company: updatedData.company_id
-                    ? { connect: { id: updatedData.company_id } }
-                    : undefined,
-                category: updatedData.category_id
-                    ? { connect: { id: updatedData.category_id } }
-                    : undefined,
-            },
-        });
-        return Project.from(updatedProjectData);
-    }
+    const updatedProject = await prisma.project.update({
+      where: { id },
+      data: {
+        naam: updatedData.naam,
+        beschrijving: updatedData.beschrijving,
+        datum_voltooid: updatedData.datum_voltooid,
+        company: updatedData.company_id
+          ? { connect: { id: updatedData.company_id } }
+          : undefined,
+        category: updatedData.category_id
+          ? { connect: { id: updatedData.category_id } }
+          : undefined,
+      },
+    });
+    return Project.from(updatedProject);
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while updating the project');
+  }
+};
 
-    // Delete a project from the database
-    async delete(id: number): Promise<void> {
-        await prisma.project.delete({
-            where: { id },
-        });
-    }
-}
+const deleteProject = async ({
+  id,
+}: {
+  id: number;
+}): Promise<void> => {
+  try {
+    await prisma.project.delete({
+      where: { id },
+    });
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while deleting the project');
+  }
+};
+
+export {
+  createProject,
+  getProjectById,
+  getAllProjects,
+  updateProject,
+  deleteProject,
+};

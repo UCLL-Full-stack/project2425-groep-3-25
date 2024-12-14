@@ -5,85 +5,121 @@ import { Project } from '../domain/model/Project';
 
 const prisma = new PrismaClient();
 
-export class CompanyRepository {
-    // Create a new company in the database
-    async create(companyData: CompanyInput): Promise<Company> {
-        const newCompany = await prisma.company.create({
-            data: {
-                naam: companyData.naam || '',
-                locatie: companyData.locatie || '',
-                contact_informatie: companyData.contact_informatie || '',
-                projects: {
-                    create:
-                        companyData.projects?.map((project) => ({
-                            naam: project.naam || '',
-                            beschrijving: project.beschrijving || '',
-                            datum_voltooid: project.datum_voltooid || new Date(),
-                            category: {
-                                connect: { id: project.category_id }, // Connect the project to an existing category by ID
-                            },
-                        })) || [],
-                },
+const createCompany = async ({
+  naam,
+  locatie,
+  contact_informatie,
+  projects,
+}: CompanyInput): Promise<Company> => {
+  try {
+    const newCompany = await prisma.company.create({
+      data: {
+        naam: naam || '',
+        locatie: locatie || '',
+        contact_informatie: contact_informatie || '',
+        projects: {
+          create: projects?.map((project) => ({
+            naam: project.naam || '',
+            beschrijving: project.beschrijving || '',
+            datum_voltooid: project.datum_voltooid || new Date(),
+            category: {
+              connect: { id: project.category_id },
             },
-            include: { projects: true }, // Include related projects in the result
-        });
+          })) || [],
+        },
+      },
+      include: { projects: true },
+    });
+    return Company.from(newCompany);
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while creating the company');
+  }
+};
 
-        return Company.from(newCompany); // Convert Prisma object to domain model
-    }
+const getCompanyById = async ({
+  id,
+}: {
+  id: number;
+}): Promise<Company | null> => {
+  try {
+    const company = await prisma.company.findUnique({
+      where: { id },
+      include: { projects: true },
+    });
+    return company ? Company.from(company) : null;
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while finding the company by ID');
+  }
+};
 
-    // Find a company by its ID
-    async findById(id: number): Promise<Company | undefined> {
-        const companyData = await prisma.company.findUnique({
-            where: { id },
-            include: { projects: true },
-        });
+const getAllCompanies = async (): Promise<Company[]> => {
+  try {
+    const companies = await prisma.company.findMany({
+      include: { projects: true },
+    });
+    return companies.map(Company.from);
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while retrieving all companies');
+  }
+};
 
-        return companyData ? Company.from(companyData) : undefined;
-    }
+const updateCompany = async (
+  id: number,
+  updatedData: Partial<CompanyInput>
+): Promise<Company | null> => {
+  try {
+    const companyExists = await prisma.company.findUnique({ where: { id } });
+    if (!companyExists) return null;
 
-    // Retrieve all companies from the database
-    async findAll(): Promise<Company[]> {
-        const companiesData = await prisma.company.findMany({
-            include: { projects: true },
-        });
-
-        return companiesData.map((company) => Company.from(company));
-    }
-
-    // Update a company in the database
-    async update(id: number, updatedData: Partial<CompanyInput>): Promise<Company | undefined> {
-        const companyExists = await prisma.company.findUnique({ where: { id } });
-        if (!companyExists) return undefined;
-
-        const updatedCompanyData = await prisma.company.update({
-            where: { id },
-            data: {
-                naam: updatedData.naam,
-                locatie: updatedData.locatie,
-                contact_informatie: updatedData.contact_informatie,
-                projects: {
-                    deleteMany: {}, // Clear existing projects before updating
-                    create:
-                        updatedData.projects?.map((project) => ({
-                            naam: project.naam,
-                            beschrijving: project.beschrijving,
-                            datum_voltooid: project.datum_voltooid || new Date(),
-                            category: {
-                                connect: { id: project.category_id }, // Connect the project to an existing category by ID
-                            },
-                        })) || [],
-                },
+    const updatedCompany = await prisma.company.update({
+      where: { id },
+      data: {
+        naam: updatedData.naam,
+        locatie: updatedData.locatie,
+        contact_informatie: updatedData.contact_informatie,
+        projects: {
+          deleteMany: {}, // Clear existing projects before updating
+          create: updatedData.projects?.map((project) => ({
+            naam: project.naam,
+            beschrijving: project.beschrijving,
+            datum_voltooid: project.datum_voltooid || new Date(),
+            category: {
+              connect: { id: project.category_id },
             },
-            include: { projects: true }, // Include projects in the updated data
-        });
+          })) || [],
+        },
+      },
+      include: { projects: true },
+    });
+    return Company.from(updatedCompany);
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while updating the company');
+  }
+};
 
-        return Company.from(updatedCompanyData);
-    }
+const deleteCompany = async ({
+  id,
+}: {
+  id: number;
+}): Promise<void> => {
+  try {
+    await prisma.company.delete({
+      where: { id },
+    });
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while deleting the company');
+  }
+};
 
-    // Delete a company from the database
-    async delete(id: number): Promise<void> {
-        await prisma.company.delete({
-            where: { id },
-        });
-    }
-}
+export {
+  createCompany,
+  getCompanyById,
+  getAllCompanies,
+  updateCompany,
+  deleteCompany,
+};

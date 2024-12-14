@@ -1,11 +1,15 @@
 import { Category as CategoryPrisma } from '@prisma/client';
 
 export class Category {
-    readonly id: number;
+    readonly id?: number;
     readonly naam: string;
     readonly beschrijving: string;
 
-    constructor(category: { id: number; naam: string; beschrijving: string }) {
+    constructor(category: {
+        id?: number;
+        naam: string;
+        beschrijving: string;
+    }) {
         this.validate(category);
 
         this.id = category.id;
@@ -13,9 +17,17 @@ export class Category {
         this.beschrijving = category.beschrijving;
     }
 
-    private validate(category: { id: number; naam: string; beschrijving: string }) {
-        if (!category.naam?.trim() || !category.beschrijving?.trim()) {
-            throw new Error('All fields are required.');
+    private validate(category: {
+        id?: number;
+        naam: string;
+        beschrijving: string;
+    }) {
+        if (!category.naam?.trim()) {
+            throw new Error('Category name is required.');
+        }
+
+        if (!category.beschrijving?.trim()) {
+            throw new Error('Category description is required.');
         }
     }
 

@@ -1,48 +1,60 @@
 import { Project } from '../domain/model/Project';
+import * as projectDb from '../repository/Project.db';
 import { ProjectInput } from '../types';
-import { ProjectRepository } from '../repository/Project.db';
 
-export class ProjectService {
-    private projectRepository: ProjectRepository;
+const getAllProjects = async (): Promise<Project[]> => {
+    return await projectDb.getAllProjects();
+};
 
-    constructor(projectRepository: ProjectRepository) {
-        this.projectRepository = projectRepository;
+const getProjectById = async ({ id }: { id: number }): Promise<Project | null> => {
+    const project = await projectDb.getProjectById({ id });
+    if (!project) {
+        throw new Error('Project not found');
     }
+    return project;
+};
 
-    async createProject(projectData: ProjectInput): Promise<Project> {
-        this.validateProjectData(projectData);
-        return await this.projectRepository.create(projectData);
-    }
+const createProject = async (projectData: ProjectInput): Promise<Project> => {
+    validateProjectData(projectData);
+    return await projectDb.createProject(projectData);
+};
 
-    async getProjectById(id: number): Promise<Project | undefined> {
-        return await this.projectRepository.findById(id);
+const updateProject = async (
+    id: number,
+    updatedData: Partial<ProjectInput>
+): Promise<Project | null> => {
+    validateProjectData(updatedData as ProjectInput);
+    const updatedProject = await projectDb.updateProject(id, updatedData);
+    if (!updatedProject) {
+        throw new Error('Project not found or could not be updated');
     }
+    return updatedProject;
+};
 
-    async listProjects(): Promise<Project[]> {
-        return await this.projectRepository.findAll();
+const deleteProject = async ({ id }: { id: number }): Promise<void> => {
+    const projectExists = await projectDb.getProjectById({ id });
+    if (!projectExists) {
+        throw new Error('Project not found');
     }
+    await projectDb.deleteProject({ id });
+};
 
-    async updateProject(
-        id: number,
-        updatedData: Partial<ProjectInput>
-    ): Promise<Project | undefined> {
-        this.validateProjectData(updatedData as ProjectInput);
-        return await this.projectRepository.update(id, updatedData);
+const validateProjectData = (projectData: ProjectInput): void => {
+    if (!projectData.naam?.trim()) {
+        throw new Error('Project name is required.');
     }
+    if (!projectData.beschrijving?.trim()) {
+        throw new Error('Project description is required.');
+    }
+    if (!projectData.datum_voltooid) {
+        throw new Error('Project completion date is required.');
+    }
+};
 
-    async deleteProject(id: number): Promise<void> {
-        await this.projectRepository.delete(id);
-    }
-
-    private validateProjectData(projectData: ProjectInput): void {
-        if (!projectData.naam?.trim()) {
-            throw new Error('Project name is required.');
-        }
-        if (!projectData.beschrijving?.trim()) {
-            throw new Error('Project description is required.');
-        }
-        if (!projectData.datum_voltooid) {
-            throw new Error('Project completion date is required.');
-        }
-    }
-}
+export default {
+    getAllProjects,
+    getProjectById,
+    createProject,
+    updateProject,
+    deleteProject,
+};

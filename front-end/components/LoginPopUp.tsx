@@ -35,16 +35,35 @@ const LoginPopUp: React.FC<LoginPopUpProps> = ({
     email: "",
     role: "employee",
   });
+  const [error, setError] = useState<string | null>(null);
 
   const handleLogin = () => {
+    if (!email || !password) {
+      setError("Please fill in both email and password.");
+      return;
+    }
     onLogin(email, password);
-    setEmail("");
-    setPassword("");
+    resetForm();
     onClose();
   };
 
   const handleRegister = () => {
+    if (!formData.firstName || !formData.lastName || !formData.email) {
+      setError("Please fill in all required fields.");
+      return;
+    }
+    if (formData.role === "partner" && (!formData.companyName || !formData.location)) {
+      setError("Please fill in all partner-specific fields.");
+      return;
+    }
     onRegister(formData);
+    resetForm();
+    onClose();
+  };
+
+  const resetForm = () => {
+    setEmail("");
+    setPassword("");
     setFormData({
       firstName: "",
       lastName: "",
@@ -52,11 +71,18 @@ const LoginPopUp: React.FC<LoginPopUpProps> = ({
       role: "employee",
     });
     setMode("choice");
-    onClose();
+    setError(null);
   };
 
-  const startLogin = () => setMode("login");
-  const startRegister = () => setMode("register");
+  const startLogin = () => {
+    setMode("login");
+    setError(null);
+  };
+
+  const startRegister = () => {
+    setMode("register");
+    setError(null);
+  };
 
   if (!isOpen) return null;
 
@@ -79,15 +105,14 @@ const LoginPopUp: React.FC<LoginPopUpProps> = ({
           </button>
         </div>
 
+        {error && <p className={styles["error-message"]}>{error}</p>}
+
         {mode === "choice" && (
           <div className={styles["popup-buttons"]}>
             <button onClick={startLogin} className={styles["login-button"]}>
               Login
             </button>
-            <button
-              onClick={startRegister}
-              className={styles["register-button"]}
-            >
+            <button onClick={startRegister} className={styles["register-button"]}>
               Register
             </button>
           </div>

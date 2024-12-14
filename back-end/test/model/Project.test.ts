@@ -23,7 +23,7 @@ describe('Project', () => {
                 beschrijving: 'Description of Project A',
                 datum_voltooid: new Date('2023-01-01'),
             });
-        }).toThrow('All fields are required.');
+        }).toThrow('Project name is required.');
     });
 
     it('should throw an error if beschrijving is empty', () => {
@@ -34,6 +34,6 @@ describe('Project', () => {
                 beschrijving: '',
                 datum_voltooid: new Date('2023-01-01'),
             });
-        }).toThrow('All fields are required.');
+        }).toThrow('Project description is required.');
     });
 });

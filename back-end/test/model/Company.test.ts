@@ -49,7 +49,7 @@ describe('Company', () => {
                 locatie: 'Location A',
                 contact_informatie: 'contact@companya.com',
             });
-        }).toThrow('All fields are required.');
+        }).toThrow('Company name is required.');
     });
 
     it('should throw an error if locatie is empty', () => {
@@ -60,7 +60,7 @@ describe('Company', () => {
                 locatie: '',
                 contact_informatie: 'contact@companya.com',
             });
-        }).toThrow('All fields are required.');
+        }).toThrow('Company location is required.');
     });
 
     it('should throw an error if contact_informatie is empty', () => {
@@ -71,6 +71,6 @@ describe('Company', () => {
                 locatie: 'Location A',
                 contact_informatie: '',
             });
-        }).toThrow('All fields are required.');
+        }).toThrow('Company contact information is required.');
     });
 });

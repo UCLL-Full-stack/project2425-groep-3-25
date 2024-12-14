@@ -1,88 +1,103 @@
 import { Company } from '../domain/model/Company';
 import { Project } from '../domain/model/Project';
+import * as companyDb from '../repository/Company.db';
 import { CompanyInput, ProjectInput } from '../types';
-import { CompanyRepository } from '../repository/Company.db';
 
-export class CompanyService {
-    private companyRepository: CompanyRepository;
+const getAllCompanies = async (): Promise<Company[]> => {
+    return await companyDb.getAllCompanies();
+};
 
-    constructor(companyRepository: CompanyRepository) {
-        this.companyRepository = companyRepository;
+const getCompanyById = async ({ id }: { id: number }): Promise<Company | null> => {
+    const company = await companyDb.getCompanyById({ id });
+    if (!company) {
+        throw new Error('Company not found');
+    }
+    return company;
+};
+
+const createCompany = async (companyData: CompanyInput): Promise<Company> => {
+    validateCompanyData(companyData);
+    return await companyDb.createCompany(companyData);
+};
+
+const updateCompany = async (
+    id: number,
+    updatedData: Partial<CompanyInput>
+): Promise<Company | null> => {
+    validateCompanyData(updatedData as CompanyInput);
+    const updatedCompany = await companyDb.updateCompany(id, updatedData);
+    if (!updatedCompany) {
+        throw new Error('Company not found or could not be updated');
+    }
+    return updatedCompany;
+};
+
+const deleteCompany = async ({ id }: { id: number }): Promise<void> => {
+    const companyExists = await companyDb.getCompanyById({ id });
+    if (!companyExists) {
+        throw new Error('Company not found');
+    }
+    await companyDb.deleteCompany({ id });
+};
+
+const addProjectToCompany = async (
+    companyId: number,
+    projectData: ProjectInput
+): Promise<Company> => {
+    const company = await companyDb.getCompanyById({ id: companyId });
+    if (!company) {
+        throw new Error('Company not found');
     }
 
-    async createCompany(companyData: CompanyInput): Promise<Company> {
-        this.validateCompanyData(companyData);
-        return await this.companyRepository.create(companyData);
+    const newProject = new Project({
+        id: projectData.id ?? (await generateProjectId()),
+        naam: projectData.naam!,
+        beschrijving: projectData.beschrijving!,
+        datum_voltooid: projectData.datum_voltooid!,
+    });
+    company.projects.push(newProject);
+
+    const companyUpdateData: Partial<CompanyInput> = {
+        ...company,
+        projects: company.projects.map((project) => ({
+            id: project.id,
+            naam: project.naam,
+            beschrijving: project.beschrijving,
+            datum_voltooid: project.datum_voltooid,
+            category_id: projectData.category_id,
+        })) as ProjectInput[],
+    };
+
+    const updatedCompany = await companyDb.updateCompany(companyId, companyUpdateData);
+    if (!updatedCompany) {
+        throw new Error('Company not found or could not be updated');
     }
+    return updatedCompany;
+};
 
-    async getCompanyById(id: number): Promise<Company | undefined> {
-        return await this.companyRepository.findById(id);
+const validateCompanyData = (companyData: CompanyInput): void => {
+    if (!companyData.naam?.trim()) {
+        throw new Error('Company name is required.');
     }
-
-    async listCompanies(): Promise<Company[]> {
-        return await this.companyRepository.findAll();
+    if (!companyData.locatie?.trim()) {
+        throw new Error('Company location is required.');
     }
-
-    async updateCompany(
-        id: number,
-        updatedData: Partial<CompanyInput>
-    ): Promise<Company | undefined> {
-        this.validateCompanyData(updatedData as CompanyInput);
-        return await this.companyRepository.update(id, updatedData);
+    if (!companyData.contact_informatie?.trim()) {
+        throw new Error('Company contact information is required.');
     }
+};
 
-    async deleteCompany(id: number): Promise<void> {
-        await this.companyRepository.delete(id);
-    }
+const generateProjectId = async (): Promise<number> => {
+    const allCompanies = await companyDb.getAllCompanies();
+    const allProjects = allCompanies.flatMap((company) => company.projects);
+    return allProjects.length > 0 ? Math.max(...allProjects.map((p) => p.id!).filter(id => id !== undefined)) + 1 : 1;
+};
 
-    async addProjectToCompany(
-        companyId: number,
-        projectData: ProjectInput
-    ): Promise<Company | undefined> {
-        const company = await this.companyRepository.findById(companyId);
-        if (!company) {
-            throw new Error('Company not found');
-        }
-
-        // Create a new Project and add it to company's project list
-        const newProject = new Project({
-            id: projectData.id ?? (await this.generateProjectId()),
-            naam: projectData.naam!,
-            beschrijving: projectData.beschrijving!,
-            datum_voltooid: projectData.datum_voltooid!,
-        });
-        company.projects.push(newProject);
-
-        // Map projects to ProjectInput format before updating
-        const companyUpdateData: Partial<CompanyInput> = {
-            ...company,
-            projects: company.projects.map((project) => ({
-                id: project.id,
-                naam: project.naam,
-                beschrijving: project.beschrijving,
-                datum_voltooid: project.datum_voltooid,
-                category_id: projectData.category_id, // Ensure category_id is included
-            })) as ProjectInput[],
-        };
-
-        return await this.companyRepository.update(companyId, companyUpdateData);
-    }
-
-    private validateCompanyData(companyData: CompanyInput): void {
-        if (!companyData.naam?.trim()) {
-            throw new Error('Company name is required.');
-        }
-        if (!companyData.locatie?.trim()) {
-            throw new Error('Company location is required.');
-        }
-        if (!companyData.contact_informatie?.trim()) {
-            throw new Error('Company contact information is required.');
-        }
-    }
-
-    private async generateProjectId(): Promise<number> {
-        const allCompanies = await this.companyRepository.findAll();
-        const allProjects = allCompanies.flatMap((company) => company.projects);
-        return allProjects.length > 0 ? Math.max(...allProjects.map((p) => p.id)) + 1 : 1;
-    }
-}
+export default {
+    getAllCompanies,
+    getCompanyById,
+    createCompany,
+    updateCompany,
+    deleteCompany,
+    addProjectToCompany,
+};

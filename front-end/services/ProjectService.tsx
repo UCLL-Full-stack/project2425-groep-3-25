@@ -1,36 +1,55 @@
+import useSWR from "swr";
+
+// Interfaces for Project Data
 export interface ProjectInput {
   naam: string;
   beschrijving: string;
-  datum_voltooid: string;
+  datum_voltooid: string; // Format: YYYY-MM-DD
 }
 
 export interface Project extends ProjectInput {
   id: number;
 }
 
-const API_BASE_URL = "http://localhost:3000/api/projects";
+// Base URL for API
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
 
-export const fetchProjects = async (): Promise<Project[]> => {
-  const response = await fetch(API_BASE_URL);
+// Fetcher function for SWR
+const fetcher = async (url: string) => {
+  const response = await fetch(url);
   if (!response.ok) {
-    throw new Error("Failed to fetch projects");
+    const errorData = await response.json();
+    throw new Error(errorData.error || "Failed to fetch data");
+  }
+  return response.json();
+};
+
+// Fetch all projects
+export const fetchProjects = async (): Promise<Project[]> => {
+  const response = await fetch(`${API_BASE_URL}/projects`);
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || "Failed to fetch projects");
   }
   const data = await response.json();
-  return Array.isArray(data) ? data : []; // Ensures data is an array
+  return data.map((project: any) => ({
+    ...project,
+    datum_voltooid: project.datum_voltooid || "",
+  }));
 };
 
+// Fetch a single project by ID
 export const fetchProjectById = async (id: number): Promise<Project> => {
-  const response = await fetch(`${API_BASE_URL}/${id}`);
+  const response = await fetch(`${API_BASE_URL}/projects/${id}`);
   if (!response.ok) {
-    throw new Error("Failed to fetch project");
+    throw new Error(`Error ${response.status}: Failed to fetch project`);
   }
-  return await response.json();
+  return response.json();
 };
 
-export const createProject = async (
-  projectData: ProjectInput
-): Promise<Project> => {
-  const response = await fetch(API_BASE_URL, {
+// Create a new project
+export const createProject = async (projectData: ProjectInput): Promise<Project> => {
+  const response = await fetch(`${API_BASE_URL}/projects`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -40,17 +59,15 @@ export const createProject = async (
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.error || "Failed to create project");
+    throw new Error(`Error ${response.status}: ${errorData.error || "Failed to create project"}`);
   }
 
-  return await response.json();
+  return response.json();
 };
 
-export const updateProject = async (
-  id: number,
-  updatedData: Partial<ProjectInput>
-): Promise<Project> => {
-  const response = await fetch(`${API_BASE_URL}/${id}`, {
+// Update an existing project
+export const updateProject = async (id: number, updatedData: Partial<ProjectInput>): Promise<Project> => {
+  const response = await fetch(`${API_BASE_URL}/projects/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -60,18 +77,30 @@ export const updateProject = async (
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.error || "Failed to update project");
+    throw new Error(`Error ${response.status}: ${errorData.error || "Failed to update project"}`);
   }
 
-  return await response.json();
+  return response.json();
 };
 
+// Delete a project
 export const deleteProject = async (id: number): Promise<void> => {
-  const response = await fetch(`${API_BASE_URL}/${id}`, {
+  const response = await fetch(`${API_BASE_URL}/projects/${id}`, {
     method: "DELETE",
   });
 
   if (!response.ok) {
-    throw new Error("Failed to delete project");
+    throw new Error(`Error ${response.status}: Failed to delete project`);
   }
+};
+
+// Hook for using SWR to fetch projects
+export const useProjects = () => {
+  const { data, error } = useSWR<Project[]>(`${API_BASE_URL}/projects`, fetcher);
+
+  return {
+    projects: data,
+    isLoading: !error && !data,
+    isError: error,
+  };
 };

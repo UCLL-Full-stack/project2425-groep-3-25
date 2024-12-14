@@ -3,51 +3,91 @@ import { Category } from '../domain/model/Category';
 
 const prisma = new PrismaClient();
 
-export class CategoryRepository {
-    // Create a new category in the database
-    async create(categoryData: { naam: string; beschrijving: string }): Promise<Category> {
-        const newCategoryData = await prisma.category.create({
-            data: {
-                naam: categoryData.naam,
-                beschrijving: categoryData.beschrijving,
-            },
-        });
-        return Category.from(newCategoryData); // Convert Prisma object to domain model
-    }
+const createCategory = async ({
+  naam,
+  beschrijving,
+}: {
+  naam: string;
+  beschrijving: string;
+}): Promise<Category> => {
+  try {
+    const newCategory = await prisma.category.create({
+      data: {
+        naam,
+        beschrijving,
+      },
+    });
+    return Category.from(newCategory);
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while creating the category');
+  }
+};
 
-    // Find a category by its ID
-    async findById(id: number): Promise<Category | undefined> {
-        const categoryData = await prisma.category.findUnique({
-            where: { id },
-        });
-        return categoryData ? Category.from(categoryData) : undefined;
-    }
+const getCategoryById = async ({
+  id,
+}: {
+  id: number;
+}): Promise<Category | null> => {
+  try {
+    const category = await prisma.category.findUnique({
+      where: { id },
+    });
+    return category ? Category.from(category) : null;
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while finding the category by ID');
+  }
+};
 
-    // Retrieve all categories from the database
-    async findAll(): Promise<Category[]> {
-        const categoriesData = await prisma.category.findMany();
-        return categoriesData.map(Category.from); // Map each Prisma object to a Category instance
-    }
+const getAllCategories = async (): Promise<Category[]> => {
+  try {
+    const categories = await prisma.category.findMany();
+    return categories.map(Category.from);
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while retrieving all categories');
+  }
+};
 
-    // Update a category in the database
-    async update(
-        id: number,
-        updatedData: { naam?: string; beschrijving?: string }
-    ): Promise<Category | undefined> {
-        const categoryExists = await prisma.category.findUnique({ where: { id } });
-        if (!categoryExists) return undefined;
+const updateCategory = async (
+  id: number,
+  updatedData: { naam?: string; beschrijving?: string }
+): Promise<Category | null> => {
+  try {
+    const categoryExists = await prisma.category.findUnique({ where: { id } });
+    if (!categoryExists) return null;
 
-        const updatedCategoryData = await prisma.category.update({
-            where: { id },
-            data: updatedData,
-        });
-        return Category.from(updatedCategoryData);
-    }
+    const updatedCategory = await prisma.category.update({
+      where: { id },
+      data: updatedData,
+    });
+    return Category.from(updatedCategory);
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while updating the category');
+  }
+};
 
-    // Delete a category from the database
-    async delete(id: number): Promise<void> {
-        await prisma.category.delete({
-            where: { id },
-        });
-    }
-}
+const deleteCategory = async ({
+  id,
+}: {
+  id: number;
+}): Promise<void> => {
+  try {
+    await prisma.category.delete({
+      where: { id },
+    });
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while deleting the category');
+  }
+};
+
+export {
+  createCategory,
+  getCategoryById,
+  getAllCategories,
+  updateCategory,
+  deleteCategory,
+};

@@ -1,73 +1,178 @@
-import express, { Request, Response } from 'express';
-import { ProjectService } from '../service/Project.service';
-import { ProjectRepository } from '../repository/Project.db';
+import express, { NextFunction, Request, Response } from 'express';
+import projectService from '../service/Project.service';
 import { ProjectInput } from '../types';
 
 const router = express.Router();
-const projectRepository = new ProjectRepository();
-const projectService = new ProjectService(projectRepository);
 
-// Create a new project
-router.post('/projects', async (req: Request, res: Response) => {
+/**
+ * @swagger
+ * tags:
+ *   name: Projects
+ *   description: Project management endpoints
+ */
+
+/**
+ * @swagger
+ * /projects:
+ *   get:
+ *     summary: Get all projects
+ *     tags: [Projects]
+ *     responses:
+ *       200:
+ *         description: List of all projects
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Project'
+ */
+router.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const projectData: ProjectInput = req.body;
-        const newProject = await projectService.createProject(projectData);
-        res.status(201).json(newProject);
+        const projects = await projectService.getAllProjects();
+        res.status(200).json(projects);
     } catch (error) {
-        console.error('Error creating project:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        next(error);
     }
 });
 
-// Get a project by ID
-router.get('/projects/:id', async (req: Request, res: Response) => {
+/**
+ * @swagger
+ * /projects/{id}:
+ *   get:
+ *     summary: Get project by ID
+ *     tags: [Projects]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The project ID
+ *     responses:
+ *       200:
+ *         description: Project details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Project'
+ *       404:
+ *         description: Project not found
+ */
+router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const projectId = parseInt(req.params.id, 10);
-        const project = await projectService.getProjectById(projectId);
+        const project = await projectService.getProjectById({ id: projectId });
         if (!project) {
             res.status(404).json({ error: 'Project not found' });
             return;
         }
         res.status(200).json(project);
     } catch (error) {
-        console.error('Error getting project by ID:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        next(error);
     }
 });
 
-// Update an existing project
-router.put('/projects/:id', async (req: Request, res: Response) => {
+/**
+ * @swagger
+ * /projects:
+ *   post:
+ *     summary: Create a new project
+ *     tags: [Projects]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ProjectInput'
+ *     responses:
+ *       201:
+ *         description: Project created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Project'
+ *       400:
+ *         description: Validation error
+ */
+router.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const projectInput: ProjectInput = req.body;
+        const project = await projectService.createProject(projectInput);
+        res.status(201).json(project);
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /projects/{id}:
+ *   put:
+ *     summary: Update an existing project
+ *     tags: [Projects]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The project ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ProjectInput'
+ *     responses:
+ *       200:
+ *         description: Project updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Project'
+ *       404:
+ *         description: Project not found
+ */
+router.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const projectId = parseInt(req.params.id, 10);
         const updatedData: Partial<ProjectInput> = req.body;
         const updatedProject = await projectService.updateProject(projectId, updatedData);
+        if (!updatedProject) {
+            res.status(404).json({ error: 'Project not found' });
+            return;
+        }
         res.status(200).json(updatedProject);
     } catch (error) {
-        console.error('Error updating project:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        next(error);
     }
 });
 
-// Delete a project by ID
-router.delete('/projects/:id', async (req: Request, res: Response) => {
+/**
+ * @swagger
+ * /projects/{id}:
+ *   delete:
+ *     summary: Delete a project by ID
+ *     tags: [Projects]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The project ID
+ *     responses:
+ *       204:
+ *         description: Project deleted successfully
+ */
+router.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const projectId = parseInt(req.params.id, 10);
-        await projectService.deleteProject(projectId);
+        await projectService.deleteProject({ id: projectId });
         res.status(204).send();
     } catch (error) {
-        console.error('Error deleting project:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
-
-// List all projects
-router.get('/projects', async (req: Request, res: Response) => {
-    try {
-        const projects = await projectService.listProjects();
-        res.status(200).json(projects);
-    } catch (error) {
-        console.error('Error listing projects:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        next(error);
     }
 });
 

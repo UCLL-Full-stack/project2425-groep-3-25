@@ -1,4 +1,4 @@
-type Role = 'Admin' | 'User';
+type Role = 'Admin' | 'User' | 'Employee'| 'Company';
 
 type ProjectInput = {
     id?: number;
@@ -31,4 +31,11 @@ type EmployeeInput = {
     role?: Role; // Role is optional here, but could be required if validated
 };
 
-export { CategoryInput, CompanyInput, ProjectInput, EmployeeInput, Role };
+type UserInput = {
+    id?: number;
+    username?: string;
+    password?: string;
+    email?: string;
+}
+
+export { CategoryInput, CompanyInput, ProjectInput, EmployeeInput, Role, UserInput };

@@ -3,7 +3,7 @@ import Head from "next/head";
 import Header from "../../components/Header";
 import CompanyCard from "../../components/CompanyCard";
 import PartnerApplicationForm from "../../components/PartnerApplicationForm";
-import { fetchCompanies } from "@/services/CompanySerice";
+import { fetchCompanies } from "@/services/CompanyService";
 import styles from "@/styles/Companies.module.css";
 import Footer from "@/components/Footer";
 
@@ -23,14 +23,24 @@ interface Company {
 const CompaniesPage: React.FC = () => {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadCompanies = async () => {
       try {
         const data = await fetchCompanies();
-        setCompanies(data);
+        const companiesWithId = data.map((company, index) => ({
+          ...company,
+          id: index + 1,
+          projects: company.projects || []
+        }));
+        setCompanies(companiesWithId);
       } catch (error) {
         console.error("Error fetching companies:", error);
+        setError("Failed to load companies. Please try again later.");
+      } finally {
+        setIsLoading(false);
       }
     };
     loadCompanies();
@@ -83,11 +93,17 @@ const CompaniesPage: React.FC = () => {
             />
           )}
 
-          <div className={styles.grid}>
-            {companies.map((company) => (
-              <CompanyCard key={company.id} company={company} />
-            ))}
-          </div>
+          {isLoading ? (
+            <p className={styles.loading}>Loading companies...</p>
+          ) : error ? (
+            <p className={styles.error}>{error}</p>
+          ) : (
+            <div className={styles.grid}>
+              {companies.map((company) => (
+                <CompanyCard key={company.id} company={company} />
+              ))}
+            </div>
+          )}
         </main>
         <Footer />
       </div>

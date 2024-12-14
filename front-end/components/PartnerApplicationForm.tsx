@@ -17,17 +17,27 @@ const PartnerApplicationForm: React.FC<PartnerApplicationFormProps> = ({
   closeModal,
   onCompanyCreated,
 }) => {
-  const [companyName, setCompanyName] = useState("");
-  const [location, setLocation] = useState("");
-  const [contactEmail, setContactEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [preferredContactMethod, setPreferredContactMethod] = useState("Email");
-  const [additionalInfo, setAdditionalInfo] = useState("");
-  const [error, setError] = useState("");
+  const [formState, setFormState] = useState({
+    companyName: "",
+    location: "",
+    contactEmail: "",
+    phoneNumber: "",
+    preferredContactMethod: "Email",
+    additionalInfo: "",
+  });
+
+  const [error, setError] = useState<string>("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormState((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     setError("");
+
+    const { companyName, location, contactEmail, phoneNumber } = formState;
 
     if (!companyName || !location || !contactEmail || !phoneNumber) {
       setError("Please fill out all required fields.");
@@ -39,8 +49,8 @@ const PartnerApplicationForm: React.FC<PartnerApplicationFormProps> = ({
       locatie: location,
       contact_informatie: contactEmail,
       telefoonnummer: phoneNumber,
-      contact_method: preferredContactMethod,
-      additional_info: additionalInfo,
+      contact_method: formState.preferredContactMethod,
+      additional_info: formState.additionalInfo,
     };
 
     onCompanyCreated(companyData);
@@ -56,7 +66,7 @@ const PartnerApplicationForm: React.FC<PartnerApplicationFormProps> = ({
         <div className={styles["popup-header"]}>
           <h2>Partner Application</h2>
           <button onClick={closeModal} className={styles["close-button"]}>
-            X
+            &times;
           </button>
         </div>
         {error && <p className={styles.error}>{error}</p>}
@@ -64,32 +74,36 @@ const PartnerApplicationForm: React.FC<PartnerApplicationFormProps> = ({
           <label className={styles["label-popUp"]}>Company Name:</label>
           <input
             type="text"
-            value={companyName}
-            onChange={(e) => setCompanyName(e.target.value)}
+            name="companyName"
+            value={formState.companyName}
+            onChange={handleChange}
             className={styles["popup-input"]}
             required
           />
           <label className={styles["label-popUp"]}>Location:</label>
           <input
             type="text"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
+            name="location"
+            value={formState.location}
+            onChange={handleChange}
             className={styles["popup-input"]}
             required
           />
           <label className={styles["label-popUp"]}>Contact Email:</label>
           <input
             type="email"
-            value={contactEmail}
-            onChange={(e) => setContactEmail(e.target.value)}
+            name="contactEmail"
+            value={formState.contactEmail}
+            onChange={handleChange}
             className={styles["popup-input"]}
             required
           />
           <label className={styles["label-popUp"]}>Phone Number:</label>
           <input
             type="tel"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
+            name="phoneNumber"
+            value={formState.phoneNumber}
+            onChange={handleChange}
             className={styles["popup-input"]}
             required
           />
@@ -97,8 +111,9 @@ const PartnerApplicationForm: React.FC<PartnerApplicationFormProps> = ({
             Preferred Contact Method:
           </label>
           <select
-            value={preferredContactMethod}
-            onChange={(e) => setPreferredContactMethod(e.target.value)}
+            name="preferredContactMethod"
+            value={formState.preferredContactMethod}
+            onChange={handleChange}
             className={styles["popup-input"]}
           >
             <option value="Email">Email</option>
@@ -108,8 +123,9 @@ const PartnerApplicationForm: React.FC<PartnerApplicationFormProps> = ({
             Additional Information:
           </label>
           <textarea
-            value={additionalInfo}
-            onChange={(e) => setAdditionalInfo(e.target.value)}
+            name="additionalInfo"
+            value={formState.additionalInfo}
+            onChange={handleChange}
             className={styles["popup-input"]}
             placeholder="Additional details about your company"
           />

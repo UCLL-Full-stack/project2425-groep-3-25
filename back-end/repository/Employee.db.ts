@@ -3,33 +3,57 @@ import { Employee } from '../domain/model/Employee';
 
 const prisma = new PrismaClient();
 
-export class EmployeeRepository {
-    async create(employeeData: {
-        naam: string;
-        email: string;
-        telefoonnummer: string;
-        bedrijf_id: number;
-    }): Promise<Employee> {
-        const newEmployeeData = await prisma.employee.create({
-            data: {
-                naam: employeeData.naam,
-                email: employeeData.email,
-                telefoonnummer: employeeData.telefoonnummer,
-                bedrijf_id: employeeData.bedrijf_id,
-            },
-        });
-        return Employee.from(newEmployeeData);
-    }
+const createEmployee = async ({
+  naam,
+  email,
+  telefoonnummer,
+  bedrijf_id,
+}: {
+  naam: string;
+  email: string;
+  telefoonnummer: string;
+  bedrijf_id: number;
+}): Promise<Employee> => {
+  try {
+    const newEmployee = await prisma.employee.create({
+      data: {
+        naam,
+        email,
+        telefoonnummer,
+        bedrijf_id,
+      },
+    });
+    return Employee.from(newEmployee);
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while creating the employee');
+  }
+};
 
-    async findById(id: number): Promise<Employee | undefined> {
-        const employeeData = await prisma.employee.findUnique({
-            where: { id },
-        });
-        return employeeData ? Employee.from(employeeData) : undefined;
-    }
+const getEmployeeById = async ({
+  id,
+}: {
+  id: number;
+}): Promise<Employee | null> => {
+  try {
+    const employee = await prisma.employee.findUnique({
+      where: { id },
+    });
+    return employee ? Employee.from(employee) : null;
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while finding the employee by ID');
+  }
+};
 
-    async findAll(): Promise<Employee[]> {
-        const employeesData = await prisma.employee.findMany();
-        return employeesData.map(Employee.from);
-    }
-}
+const getAllEmployees = async (): Promise<Employee[]> => {
+  try {
+    const employees = await prisma.employee.findMany();
+    return employees.map(Employee.from);
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while retrieving all employees');
+  }
+};
+
+export { createEmployee, getEmployeeById, getAllEmployees };

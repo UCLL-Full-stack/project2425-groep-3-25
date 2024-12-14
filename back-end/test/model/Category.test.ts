@@ -20,7 +20,7 @@ describe('Category', () => {
                 naam: '',
                 beschrijving: 'All about technology',
             });
-        }).toThrow('All fields are required.');
+        }).toThrow('Category name is required.');
     });
 
     it('should throw an error if beschrijving is empty', () => {
@@ -30,6 +30,6 @@ describe('Category', () => {
                 naam: 'Technology',
                 beschrijving: '',
             });
-        }).toThrow('All fields are required.');
+        }).toThrow('Category description is required.');
     });
 });

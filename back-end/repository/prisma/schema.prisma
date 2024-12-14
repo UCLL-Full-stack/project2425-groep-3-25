@@ -16,7 +16,8 @@ model Company {
   contact_informatie String
   employees          Employee[] @relation("CompanyEmployees")
   projects           Project[]
-
+  user_id            Int?        @unique
+  user               User?       @relation(fields: [user_id], references: [id])
   @@map("Company")
 }
 
@@ -30,7 +31,8 @@ model User {
   username String @unique
   password String
   email    String @unique
-  role     Role
+  company  Company?
+  employee Employee?
 }
 
 model Employee {
@@ -41,7 +43,8 @@ model Employee {
   telefoonnummer    String
   company           Company            @relation("CompanyEmployees", fields: [bedrijf_id], references: [id])
   employeeProjects  Employee_Project[]
-
+  user_id           Int?                @unique
+  user              User?               @relation(fields: [user_id], references: [id])
   @@map("Employee")
 }
 

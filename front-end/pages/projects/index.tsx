@@ -1,5 +1,3 @@
-// pages/projects.tsx
-
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import Header from "../../components/Header";
@@ -20,6 +18,7 @@ const ProjectsPage: React.FC = () => {
     datum_voltooid: "",
   });
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -29,6 +28,8 @@ const ProjectsPage: React.FC = () => {
       } catch (error) {
         console.error("Error fetching projects:", error);
         setError("Failed to load projects. Please try again later.");
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -67,6 +68,10 @@ const ProjectsPage: React.FC = () => {
     <>
       <Head>
         <title>Projects - ProjectShowcase</title>
+        <meta
+          name="description"
+          content="Explore our collaborative projects and contribute to making a difference."
+        />
       </Head>
 
       <div className={styles.projectPage}>
@@ -107,23 +112,33 @@ const ProjectsPage: React.FC = () => {
               required
               className={styles.inputField}
             />
-            <button onClick={handleAddProject} className={styles.submitButton}>
+            <button
+              onClick={handleAddProject}
+              className={styles.submitButton}
+              disabled={isLoading}
+            >
               Add Project
             </button>
           </div>
 
-          <div className={styles.projectGrid}>
-            {projects.map((project) => (
-              <div key={project.id} className={styles.projectCard}>
-                <h2>{project.naam}</h2>
-                <p>{project.beschrijving}</p>
-                <p>
-                  Completion Date:{" "}
-                  {new Date(project.datum_voltooid).toLocaleDateString()}
-                </p>
-              </div>
-            ))}
-          </div>
+          {isLoading ? (
+            <p className={styles.loadingText}>Loading projects...</p>
+          ) : error ? (
+            <p className={styles.errorText}>{error}</p>
+          ) : (
+            <div className={styles.projectGrid}>
+              {projects.map((project) => (
+                <div key={project.id} className={styles.projectCard}>
+                  <h2>{project.naam}</h2>
+                  <p>{project.beschrijving}</p>
+                  <p>
+                    Completion Date:{" "}
+                    {new Date(project.datum_voltooid).toLocaleDateString()}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
         </main>
         <Footer />
       </div>

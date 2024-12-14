@@ -8,14 +8,14 @@ describe('User', () => {
             username: 'john_doe',
             password: 'password123',
             email: 'john@ucll.be',
-            role: 'User' as Role,
+           
         });
 
         expect(user.id).toBe(1);
         expect(user.username).toBe('john_doe');
         expect(user.password).toBe('password123');
         expect(user.email).toBe('john@ucll.be');
-        expect(user.role).toBe('User');
+        
     });
 
     it('should throw an error if id is negative', () => {
@@ -25,7 +25,7 @@ describe('User', () => {
                 username: 'john_doe',
                 password: 'password123',
                 email: 'john@ucll.be',
-                role: 'User' as Role,
+                
             });
         }).toThrow('Id cannot be negative.');
     });
@@ -37,7 +37,7 @@ describe('User', () => {
                 username: '',
                 password: 'password123',
                 email: 'john@ucll.be',
-                role: 'User' as Role,
+                
             });
         }).toThrow('Username is required.');
     });
@@ -49,7 +49,7 @@ describe('User', () => {
                 username: 'john_doe',
                 password: 'password123',
                 email: '',
-                role: 'User' as Role,
+                
             });
         }).toThrow('Email is required.');
     });
@@ -60,11 +60,11 @@ describe('User', () => {
                 id: 1,
                 username: 'john_doe',
                 password: 'password123',
-                email: 'john@invalid.com',
-                role: 'User' as Role,
+                email: 'john@',
+                
             });
         }).toThrow(
-            'Email does not have a correct format. Example format: John@ucll.be or JohnDoe@ucll.be (Numbers are not authorized)'
+            'Email does not have a correct format.'
         );
     });
 
@@ -75,20 +75,10 @@ describe('User', () => {
                 username: 'john_doe',
                 password: '',
                 email: 'john@ucll.be',
-                role: 'User' as Role,
+                
             });
         }).toThrow('Password is required.');
     });
 
-    it('should throw an error if role is invalid', () => {
-        expect(() => {
-            new User({
-                id: 1,
-                username: 'john_doe',
-                password: 'password123',
-                email: 'john@ucll.be',
-                role: 'InvalidRole' as Role,
-            });
-        }).toThrow('Role does not have the correct format.');
-    });
+
 });

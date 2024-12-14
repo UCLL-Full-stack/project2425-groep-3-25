@@ -1,61 +1,110 @@
 import { PrismaClient } from '@prisma/client';
 import { User } from '../domain/model/User';
-import { Role } from '../types'; // Assuming you have a `Role` type defined in your project
+import { Role, UserInput } from '../types';
 
 const prisma = new PrismaClient();
 
-export class UserRepository {
-    // Create a new user in the database
-    async create(userData: {
-        username: string;
-        password: string;
-        email: string;
-        role: Role;
-    }): Promise<User> {
-        const newUserData = await prisma.user.create({
-            data: {
-                username: userData.username,
-                password: userData.password,
-                email: userData.email,
-                role: userData.role,
-            },
-        });
-        return User.from(newUserData); // Convert Prisma object to domain model
-    }
+const createUser = async ({username, password, email,}: User): Promise<User> => {
+  try {
+    const newUser = await prisma.user.create({
+      data: {
+        username,
+        password,
+        email, 
+      },
+    });
+    return User.from(newUser);
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while creating the user');
+  }
+};
 
-    // Find a user by its ID
-    async findById(id: number): Promise<User | undefined> {
-        const userData = await prisma.user.findUnique({
-            where: { id },
-        });
-        return userData ? User.from(userData) : undefined;
-    }
+const getUserById = async ({
+  id,
+}: {
+  id: number;
+}): Promise<User | null> => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+    return user ? User.from(user) : null;
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while finding the user by ID');
+  }
+};
 
-    // Retrieve all users from the database
-    async findAll(): Promise<User[]> {
-        const usersData = await prisma.user.findMany();
-        return usersData.map(User.from); // Map each Prisma object to a User instance
-    }
+const getUserByUsername = async ({username }: {username: string}): Promise<User | null> => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        username,
+      },
+    });
+    return user ? User.from(user) : null;
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while finding the user by username');
+  }
+};
 
-    // Update a user in the database
-    async update(
-        id: number,
-        updatedData: { username?: string; password?: string; email?: string; role?: Role }
-    ): Promise<User | undefined> {
-        const userExists = await prisma.user.findUnique({ where: { id } });
-        if (!userExists) return undefined;
+const getAllUsers = async (): Promise<User[]> => {
+  try {
+    const users = await prisma.user.findMany();
+    return users.map(User.from);
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while retrieving all users');
+  }
+};
 
-        const updatedUserData = await prisma.user.update({
-            where: { id },
-            data: updatedData,
-        });
-        return User.from(updatedUserData);
-    }
+const updateUser = async (id: number, updatedData: Partial<User>): Promise<User | null> => {
+  try {
+    const userExists = await prisma.user.findUnique({
+      where: { id, },
+    });
+    if (!userExists) return null;
 
-    // Delete a user from the database
-    async delete(id: number): Promise<void> {
-        await prisma.user.delete({
-            where: { id },
-        });
-    }
-}
+    const updatedUser = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: updatedData,
+    });
+    return User.from(updatedUser);
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while updating the user');
+  }
+};
+
+const deleteUser = async ({
+  id,
+}: {
+  id: number;
+}): Promise<void> => {
+  try {
+    await prisma.user.delete({
+      where: {
+        id,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while deleting the user');
+  }
+};
+
+export {
+  createUser,
+  getUserById,
+  getUserByUsername,
+  getAllUsers,
+  updateUser,
+  deleteUser,
+};
+

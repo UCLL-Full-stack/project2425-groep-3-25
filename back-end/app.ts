@@ -1,11 +1,12 @@
 import * as dotenv from 'dotenv';
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import companyRoutes from './controller/Company.routes';
 import projectRoutes from './controller/Project.routes';
+import userRoutes from './controller/User.routes';
 
 const app = express();
 dotenv.config();
@@ -23,18 +24,22 @@ const swaggerOptions = {
             description: 'API documentation for the service',
         },
     },
-    apis: ['controller/*.ts'], 
+    apis: ['controller/*.routes.ts'], 
 };
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.use('/api', companyRoutes);
-app.use('/api', projectRoutes);
+app.use('/companies', companyRoutes);
+app.use('/projects', projectRoutes);
+app.use('/users', userRoutes);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
+});
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    res.status(400).json({ status: "application error", message: err.message });
 });
 
 app.listen(port, () => {

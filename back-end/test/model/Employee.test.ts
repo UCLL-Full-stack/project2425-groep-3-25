@@ -23,7 +23,7 @@ describe('Employee', () => {
                 email: 'john.doe@example.com',
                 telefoonnummer: '1234567890',
             });
-        }).toThrow('All fields are required.');
+        }).toThrow('Employee name is required.');
 
         expect(() => {
             new Employee({
@@ -32,7 +32,7 @@ describe('Employee', () => {
                 email: '',
                 telefoonnummer: '1234567890',
             });
-        }).toThrow('All fields are required.');
+        }).toThrow('Employee email is required.');
 
         expect(() => {
             new Employee({
@@ -41,7 +41,7 @@ describe('Employee', () => {
                 email: 'john.doe@example.com',
                 telefoonnummer: '',
             });
-        }).toThrow('All fields are required.');
+        }).toThrow('Employee phone number is required.');
     });
 
     it('should throw an error if email format is invalid', () => {
