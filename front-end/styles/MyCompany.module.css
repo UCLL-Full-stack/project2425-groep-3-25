@@ -1,0 +1,86 @@
+.myCompanyPage {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(180deg, #0f172a, #1e293b);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #ffffff;
+    margin-top: 80px;
+    padding: 2rem;
+  }
+  
+  .myCompanyTitle {
+    font-size: 2.8rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    color: #407ace;
+    text-align: center;
+    margin-top: 40px;
+  }
+  
+  .myCompanyDetails {
+    font-size: 1.1rem;
+    color: #e0e0e0;
+    text-align: left;
+    margin-top: 1rem;
+    max-width: 800px;
+    line-height: 1.8;
+  }
+  
+  .myCompanyCard {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: #ffffff;
+    backdrop-filter: blur(8px);
+    margin: 2rem auto;
+    max-width: 600px;
+    width: 90%;
+  }
+  
+  .myCompanyCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  }
+  
+  .myCompanyCardTitle {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #407ace;
+  }
+  
+  .myCompanyCardText {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #e0e0e0;
+  }
+  
+  .myCompanyButtonContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+  
+  .myCompanyButton {
+    background-color: #407ace;
+    color: #ffffff;
+    border: none;
+    padding: 0.8rem 1.6rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(64, 122, 206, 0.5);
+  }
+  
+  .myCompanyButton:hover {
+    background-color: #365d9e;
+    transform: scale(1.05);
+  }
+  

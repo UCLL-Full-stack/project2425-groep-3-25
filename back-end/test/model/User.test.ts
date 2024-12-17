@@ -8,6 +8,7 @@ describe('User', () => {
             username: 'john_doe',
             password: 'password123',
             email: 'john@ucll.be',
+            role: "Employee",
            
         });
 
@@ -25,6 +26,7 @@ describe('User', () => {
                 username: 'john_doe',
                 password: 'password123',
                 email: 'john@ucll.be',
+                role: "Employee",
                 
             });
         }).toThrow('Id cannot be negative.');
@@ -37,6 +39,7 @@ describe('User', () => {
                 username: '',
                 password: 'password123',
                 email: 'john@ucll.be',
+                role: "Employee",
                 
             });
         }).toThrow('Username is required.');
@@ -49,6 +52,7 @@ describe('User', () => {
                 username: 'john_doe',
                 password: 'password123',
                 email: '',
+                role: "Employee",
                 
             });
         }).toThrow('Email is required.');
@@ -61,6 +65,7 @@ describe('User', () => {
                 username: 'john_doe',
                 password: 'password123',
                 email: 'john@',
+                role: "Employee",
                 
             });
         }).toThrow(
@@ -75,6 +80,7 @@ describe('User', () => {
                 username: 'john_doe',
                 password: '',
                 email: 'john@ucll.be',
+                role: "Employee",
                 
             });
         }).toThrow('Password is required.');

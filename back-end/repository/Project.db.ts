@@ -9,20 +9,24 @@ const createProject = async ({
   naam,
   beschrijving,
   datum_voltooid,
-  company_id,
-  category_id,
+  bedrijf_id,
+  categorie_id,
 }: ProjectInput): Promise<Project> => {
   try {
+    const parsedDate = new Date(datum_voltooid);
+    if (isNaN(parsedDate.getTime())) {
+      throw new Error('Invalid date format. Please provide a valid ISO-8601 date.');
+    }
     const newProject = await prisma.project.create({
       data: {
         naam: naam || 'Default Naam',
         beschrijving: beschrijving || 'Default Beschrijving',
-        datum_voltooid: datum_voltooid || new Date(),
+        datum_voltooid: parsedDate ,
         company: {
-          connect: { id: company_id },
+          connect: { id: bedrijf_id },
         },
         category: {
-          connect: { id: category_id },
+          connect: { id: categorie_id },
         },
       },
     });
@@ -75,11 +79,11 @@ const updateProject = async (
         naam: updatedData.naam,
         beschrijving: updatedData.beschrijving,
         datum_voltooid: updatedData.datum_voltooid,
-        company: updatedData.company_id
-          ? { connect: { id: updatedData.company_id } }
+        company: updatedData.bedrijf_id
+          ? { connect: { id: updatedData.bedrijf_id } }
           : undefined,
-        category: updatedData.category_id
-          ? { connect: { id: updatedData.category_id } }
+        category: updatedData.categorie_id
+          ? { connect: { id: updatedData.categorie_id } }
           : undefined,
       },
     });

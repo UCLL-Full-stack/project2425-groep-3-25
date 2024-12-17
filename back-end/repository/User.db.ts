@@ -4,13 +4,15 @@ import { Role, UserInput } from '../types';
 
 const prisma = new PrismaClient();
 
-const createUser = async ({username, password, email,}: User): Promise<User> => {
+const createUser = async ({firstName, lastName, password, email, role}: User): Promise<User> => {
   try {
     const newUser = await prisma.user.create({
       data: {
-        username,
+        firstName, 
+        lastName,
         password,
         email, 
+        role,
       },
     });
     return User.from(newUser);
@@ -38,29 +40,48 @@ const getUserById = async ({
   }
 };
 
-const getUserByUsername = async ({username }: {username: string}): Promise<User | null> => {
+// const getUserByUsername = async ({username }: {username: string}): Promise<User | null> => {
+//   try {
+//     const user = await prisma.user.findUnique({
+//       where: {
+//         username,
+//       },
+//     });
+//     return user ? User.from(user) : null;
+//   } catch (error) {
+//     console.error(error);
+//     throw new Error('An error occurred while finding the user by username');
+//   }
+// };
+const getUserByEmail = async ({email }: {email: string}): Promise<User | null> => {
   try {
     const user = await prisma.user.findUnique({
       where: {
-        username,
+        email,
       },
     });
     return user ? User.from(user) : null;
   } catch (error) {
     console.error(error);
-    throw new Error('An error occurred while finding the user by username');
+    throw new Error('An error occurred while finding the user by email');
   }
 };
 
 const getAllUsers = async (): Promise<User[]> => {
   try {
-    const users = await prisma.user.findMany();
+    const users = await prisma.user.findMany({
+      include: {
+        company: true, 
+        employee: true, 
+      }});
     return users.map(User.from);
   } catch (error) {
     console.error(error);
     throw new Error('An error occurred while retrieving all users');
   }
 };
+
+
 
 const updateUser = async (id: number, updatedData: Partial<User>): Promise<User | null> => {
   try {
@@ -99,12 +120,23 @@ const deleteUser = async ({
   }
 };
 
+const deleteAllUsers = async (): Promise<void> => {
+  try {
+    await prisma.user.deleteMany(); // Deletes all users in the database
+    console.log('All users have been deleted successfully.');
+  } catch (error) {
+    console.error('Error deleting all users:', (error as any).message);
+    throw new Error('An error occurred while deleting all users');
+  }
+};
+
 export {
   createUser,
   getUserById,
-  getUserByUsername,
   getAllUsers,
   updateUser,
   deleteUser,
+  getUserByEmail,
+  deleteAllUsers,
 };
 

@@ -2,6 +2,7 @@ import { Company } from '../domain/model/Company';
 import { Project } from '../domain/model/Project';
 import * as companyDb from '../repository/Company.db';
 import { CompanyInput, ProjectInput } from '../types';
+import jwt from 'jsonwebtoken';
 
 const getAllCompanies = async (): Promise<Company[]> => {
     return await companyDb.getAllCompanies();
@@ -52,6 +53,8 @@ const addProjectToCompany = async (
     const newProject = new Project({
         id: projectData.id ?? (await generateProjectId()),
         naam: projectData.naam!,
+        bedrijf_id: projectData.bedrijf_id,
+        categorie_id: projectData.categorie_id,
         beschrijving: projectData.beschrijving!,
         datum_voltooid: projectData.datum_voltooid!,
     });
@@ -64,8 +67,9 @@ const addProjectToCompany = async (
             naam: project.naam,
             beschrijving: project.beschrijving,
             datum_voltooid: project.datum_voltooid,
-            category_id: projectData.category_id,
+            categorie_id: projectData.categorie_id,
         })) as ProjectInput[],
+        user_id: company.user_id ?? undefined,
     };
 
     const updatedCompany = await companyDb.updateCompany(companyId, companyUpdateData);
@@ -82,10 +86,20 @@ const validateCompanyData = (companyData: CompanyInput): void => {
     if (!companyData.locatie?.trim()) {
         throw new Error('Company location is required.');
     }
-    if (!companyData.contact_informatie?.trim()) {
-        throw new Error('Company contact information is required.');
+    if (!companyData.validationInfo?.trim()) {
+        throw new Error('Company information is required.');
     }
 };
+
+const getCompanyByUserId = async (userId: number): Promise<Company | null> => {
+    const company = await companyDb.getCompanyByUserId(userId);
+    if (!company) {
+      throw new Error('Company not found.');
+    }
+    
+    return company;
+  };
+  
 
 const generateProjectId = async (): Promise<number> => {
     const allCompanies = await companyDb.getAllCompanies();
@@ -100,4 +114,5 @@ export default {
     updateCompany,
     deleteCompany,
     addProjectToCompany,
+    getCompanyByUserId,
 };

@@ -1,78 +1,74 @@
 import React, { useState } from "react";
 import styles from "../styles/LoginPopUp.module.css";
+import { RegisterInput, login, signUp } from "../services/UserService";
 
 interface LoginPopUpProps {
   isOpen: boolean;
   onClose: () => void;
   onLogin: (email: string, password: string) => void;
-  onRegister: (formData: RegisterFormData) => void;
-}
-
-interface RegisterFormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  birthDate?: string;
-  role: "employee" | "partner";
-  location?: string;
-  companyName?: string;
-  companyValidationInfo?: string;
-  preferredContactMethod?: string;
+  onRegister: (formData: RegisterInput) => void;
 }
 
 const LoginPopUp: React.FC<LoginPopUpProps> = ({
   isOpen,
   onClose,
-  onLogin,
-  onRegister,
 }) => {
+  // States
   const [mode, setMode] = useState<"choice" | "login" | "register">("choice");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [formData, setFormData] = useState<RegisterFormData>({
+  const [formData, setFormData] = useState<RegisterInput>({
     firstName: "",
     lastName: "",
     email: "",
-    role: "employee",
+    password: "",
+    role: "Employee",
   });
   const [error, setError] = useState<string | null>(null);
-
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !password) {
       setError("Please fill in both email and password.");
       return;
     }
-    onLogin(email, password);
-    resetForm();
-    onClose();
+  
+    try {
+      const response = await login({ email, password }); // Call API login function
+      console.log("Login Success:", response);
+  
+      localStorage.setItem("token", response.token); // Save token
+      window.location.reload(); // Reload the app to update the login state
+    } catch (error: any) {
+      setError(error.message || "Login failed. Please try again.");
+    }
   };
 
-  const handleRegister = () => {
-    if (!formData.firstName || !formData.lastName || !formData.email) {
-      setError("Please fill in all required fields.");
-      return;
+  const handleRegister = async () => {
+    try {
+      // General required field checks
+      if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
+        setError("Please fill in all required fields.");
+        return;
+      }
+  
+      // Company-specific checks
+      if (
+        formData.role === "Company" &&
+        (!formData.companyName || !formData.locatie)
+      ) {
+        setError("Please provide all company-specific fields (name and location).");
+        return;
+      }
+  
+      // Call the API
+      await signUp(formData);
+      console.log("Registration Successful");
+      onClose();
+    } catch (err: any) {
+      setError(err.message || "Registration failed.");
     }
-    if (formData.role === "partner" && (!formData.companyName || !formData.location)) {
-      setError("Please fill in all partner-specific fields.");
-      return;
-    }
-    onRegister(formData);
-    resetForm();
-    onClose();
   };
+  
 
-  const resetForm = () => {
-    setEmail("");
-    setPassword("");
-    setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      role: "employee",
-    });
-    setMode("choice");
-    setError(null);
-  };
 
   const startLogin = () => {
     setMode("login");
@@ -196,17 +192,29 @@ const LoginPopUp: React.FC<LoginPopUpProps> = ({
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  role: e.target.value as "employee" | "partner",
+                  role: e.target.value as "Employee" | "Company",
                 })
               }
               className={styles["popup-input"]}
               required
             >
-              <option value="employee">Employee</option>
-              <option value="partner">Partner</option>
+              <option value="Employee">Employee</option>
+              <option value="Company">Company</option>
             </select>
 
-            {formData.role === "partner" && (
+            <label className={styles["label-popUp"]}>Password:</label>
+            <input
+              type="password"
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+              className={styles["popup-input"]}
+              placeholder="Enter password"
+              required
+            />
+
+            {formData.role === "Company" && (
               <>
                 <label className={styles["label-popUp"]}>Company Name:</label>
                 <input
@@ -223,9 +231,9 @@ const LoginPopUp: React.FC<LoginPopUpProps> = ({
                 <label className={styles["label-popUp"]}>Location:</label>
                 <input
                   type="text"
-                  value={formData.location || ""}
+                  value={formData.locatie || ""}
                   onChange={(e) =>
-                    setFormData({ ...formData, location: e.target.value })
+                    setFormData({ ...formData, locatie: e.target.value })
                   }
                   className={styles["popup-input"]}
                   placeholder="Enter location"
@@ -233,23 +241,23 @@ const LoginPopUp: React.FC<LoginPopUpProps> = ({
                 />
 
                 <label className={styles["label-popUp"]}>
-                  Company Validation Info:
+                  Company description:
                 </label>
                 <textarea
-                  value={formData.companyValidationInfo || ""}
+                  value={formData.validationInfo || ""}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      companyValidationInfo: e.target.value,
+                      validationInfo: e.target.value,
                     })
                   }
                   className={styles["popup-input"]}
-                  placeholder="Provide information to validate the company"
+                  placeholder="Provide description to validate the company"
                   rows={3}
                   required
                 />
 
-                <label className={styles["label-popUp"]}>
+                {/* <label className={styles["label-popUp"]}>
                   Preferred Contact Method:
                 </label>
                 <select
@@ -264,7 +272,7 @@ const LoginPopUp: React.FC<LoginPopUpProps> = ({
                 >
                   <option value="Email">Email</option>
                   <option value="Phone">Phone</option>
-                </select>
+                </select> */}
               </>
             )}
 

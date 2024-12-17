@@ -5,37 +5,47 @@ import { Project } from '../domain/model/Project';
 
 const prisma = new PrismaClient();
 
-const createCompany = async ({
-  naam,
-  locatie,
-  contact_informatie,
-  projects,
-}: CompanyInput): Promise<Company> => {
+const createCompany = async (companyData: CompanyInput): Promise<Company> => {
+  const { naam, locatie, validationInfo, user_id } = companyData;
+
+  if (!user_id) {
+    throw new Error('User ID is required to create a company.');
+  }
+
+  const newCompany = await prisma.company.create({
+    data: {
+      naam,
+      locatie,
+      validationInfo: validationInfo || '',
+      user: { connect: { id: user_id } }, // Link user to company
+    },
+    include: { projects: true }, // Include related projects if needed
+  });
+
+  console.log('Created Company:', newCompany); // Debugging
+  return Company.from(newCompany);
+};
+
+
+const getCompanyByUserId = async (userId: number): Promise<Company | null> => {
   try {
-    const newCompany = await prisma.company.create({
-      data: {
-        naam: naam || '',
-        locatie: locatie || '',
-        contact_informatie: contact_informatie || '',
-        projects: {
-          create: projects?.map((project) => ({
-            naam: project.naam || '',
-            beschrijving: project.beschrijving || '',
-            datum_voltooid: project.datum_voltooid || new Date(),
-            category: {
-              connect: { id: project.category_id },
-            },
-          })) || [],
-        },
-      },
+    const company = await prisma.company.findUnique({
+      where: { user_id: userId },
       include: { projects: true },
     });
-    return Company.from(newCompany);
+
+    if (!company) {
+      console.error(`No company found for user_id: ${userId}`);
+      throw new Error('Company not found.');
+    }
+
+    return Company.from(company);
   } catch (error) {
-    console.error(error);
-    throw new Error('An error occurred while creating the company');
+    console.error('Error fetching company by user ID:', error);
+    throw new Error('Could not fetch company by user ID.');
   }
 };
+
 
 const getCompanyById = async ({
   id,
@@ -79,7 +89,7 @@ const updateCompany = async (
       data: {
         naam: updatedData.naam,
         locatie: updatedData.locatie,
-        contact_informatie: updatedData.contact_informatie,
+        validationInfo: updatedData.validationInfo,
         projects: {
           deleteMany: {}, // Clear existing projects before updating
           create: updatedData.projects?.map((project) => ({
@@ -87,7 +97,7 @@ const updateCompany = async (
             beschrijving: project.beschrijving,
             datum_voltooid: project.datum_voltooid || new Date(),
             category: {
-              connect: { id: project.category_id },
+              connect: { id: project.categorie_id },
             },
           })) || [],
         },
@@ -122,4 +132,5 @@ export {
   getAllCompanies,
   updateCompany,
   deleteCompany,
+  getCompanyByUserId,
 };

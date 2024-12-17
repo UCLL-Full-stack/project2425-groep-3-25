@@ -102,3 +102,16 @@
   color: #4f9dff;
   transform: rotate(15deg);
 }
+
+.cancel-button {
+  background-color: #dc3545;
+  color: #ffffff;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 10px rgba(220, 53, 69, 0.5);
+}

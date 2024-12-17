@@ -1,9 +1,14 @@
 import express, { NextFunction, Request, Response } from 'express';
 import companyService from '../service/Company.service';
 import { CompanyInput, ProjectInput } from '../types';
+import jwt from "jsonwebtoken";
+import userService from '../service/User.service';
 
 const router = express.Router();
-
+const jwtSecret = process.env.JWT_SECRET;
+if (!jwtSecret) {
+  throw new Error('JWT_SECRET is not defined in the environment variables');
+}
 /**
  * @swagger
  * tags:
@@ -35,6 +40,47 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
         next(error);
     }
 });
+
+router.get('/myCompany', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const authHeader = req.headers.authorization;
+  
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ error: 'Unauthorized. Missing or invalid token.' });
+      }
+  
+      const token = authHeader.split(' ')[1];
+  
+      let email: string;
+      try {
+        const decoded = jwt.verify(token, jwtSecret) as { email: string };
+        email = decoded.email;
+      } catch (error) {
+        return res.status(401).json({ error: 'Invalid token.' });
+      }
+  
+      // Find the user ID using the email
+      const user = await userService.getUserByEmail(email);
+      if (!user || !user.id) {
+        return res.status(404).json({ error: 'User not found.' });
+      }
+  
+      // Use the ID to fetch the company
+      const company = await companyService.getCompanyByUserId(user.id);
+  
+      if (!company) {
+        return res.status(404).json({ error: 'No company found for this user.' });
+      }
+  
+      res.status(200).json(company);
+    } catch (error) {
+      next(error);
+    }
+  });
+  
+  
+  
+  
 
 /**
  * @swagger

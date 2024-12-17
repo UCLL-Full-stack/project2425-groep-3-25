@@ -5,8 +5,8 @@ type ProjectInput = {
     naam: string;
     beschrijving: string;
     datum_voltooid: Date;
-    company_id: number; // ID of the associated Company
-    category_id: number; // ID of the associated Category
+    bedrijf_id: number; // ID of the associated Company
+    categorie_id: number; // ID of the associated Category
 };
 
 type CategoryInput = {
@@ -19,23 +19,36 @@ type CompanyInput = {
     id?: number;
     naam: string; // Make required if validated as necessary
     locatie: string; // Make required if validated as necessary
-    contact_informatie: string; // Make required if validated as necessary
-    projects?: ProjectInput[]; // Optional array of projects
+    validationInfo?: string; // Make required if validated as necessary
+    projects?: ProjectInput[];
+    user_id?: number; // Optional array of projects
 };
 
 type EmployeeInput = {
     id?: number;
-    naam: string; // Make required if validated as necessary
-    email: string; // Make required if validated as necessary
+    naam: string; 
+    email: string; 
     telefoonnummer?: string;
-    role?: Role; // Role is optional here, but could be required if validated
+    role?: Role;
+    user_id?: number;
+    bedrijf_id?: number; // Role is optional here, but could be required if validated
 };
 
 type UserInput = {
-    id?: number;
-    username?: string;
+    firstName?: string;
+    lastName?: string;
     password?: string;
     email?: string;
+    role?: Role;
+    companyName?: string; 
+    locatie?: string;    
+    validationInfo?: string; 
 }
 
-export { CategoryInput, CompanyInput, ProjectInput, EmployeeInput, Role, UserInput };
+type AuthenticationResponse = {
+    token: string;
+    username: string;
+    password: string;
+}
+
+export { CategoryInput, CompanyInput, ProjectInput, EmployeeInput, Role, UserInput, AuthenticationResponse };

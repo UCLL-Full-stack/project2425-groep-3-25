@@ -1,47 +1,55 @@
 import { User as UserPrisma } from '@prisma/client';
+import { Role } from '../../types';
 
 export class User {
     readonly id?: number;
-    readonly username: string;
+    readonly firstName: string;
+    readonly lastName: string;
     readonly password: string;
     readonly email: string;
+    readonly role: Role;
 
     constructor(user: {
         id?: number;
-        username: string;
+        firstName: string;
+        lastName: string;
         password: string;
         email: string;
+        role: Role;
     }) {
         this.validate(user);
 
         this.id = user.id;
-        this.username = user.username;
+        this.firstName = user.firstName;
+        this.lastName = user.lastName;
         this.password = user.password;
         this.email = user.email;
+        this.role = user.role;
     
     }
+    
 
-    validate(user: { id?: number; username: string; password: string; email: string; }) {
+    validate(user: { id?: number; firstName: string; lastName: string;  password: string; email: string; role: Role; }) {
         if (user.id !== undefined && user.id < 0) {
-
             throw new Error('Id cannot be negative.');
-
         }
 
-        if (!user.username?.trim()) {
-            throw new Error('Username is required.');
-        }
 
-        if (!user.email?.trim()) {
+        if (!user.email || !user.email.trim()) {
+            console.error('Invalid or missing email:', user.email);
             throw new Error('Email is required.');
-        }
-
-        const regexMail = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-        if (!regexMail.test(user.email)) {
-          throw new Error('Email does not have a correct format.');
+          }
+          
+        const regexMail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!regexMail.test(user.email.trim())) {
+        console.error('Invalid email format:', user.email);
+        throw new Error('Invalid email format. Please provide a valid email address.');
         }
         if (!user.password?.trim()) {
             throw new Error('Password is required.');
+        }
+        if (!user.role?.trim()) {
+            throw new Error('Role is required.');
         }
 
         
@@ -49,12 +57,16 @@ export class User {
 
     // Static from method to convert Prisma object to domain model
     static from(data: UserPrisma): User {
-        return new User({
+        try  {return new User({
             id: data.id,
-            username: data.username,
+            firstName : data.firstName,
+            lastName : data.lastName,
             password: data.password,
             email: data.email,
-            
-        });
+            role: data.role as Role,
+        });}
+        catch (error) {
+            console.error('Error creating User object:', (error as Error).message, data);
+            throw error; }
     }
 }

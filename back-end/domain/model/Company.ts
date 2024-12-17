@@ -5,21 +5,24 @@ export class Company {
     readonly id?: number;
     readonly naam: string;
     readonly locatie: string;
-    readonly contact_informatie: string;
+    readonly validationInfo: string;
+    readonly user_id: number;
     readonly projects: Project[];
 
     constructor(company: {
         id?: number;
         naam: string;
         locatie: string;
-        contact_informatie: string;
+        validationInfo: string;
+        user_id: number ;
         projects?: Project[];
     }) {
         this.id = company.id;
         this.naam = company.naam;
         this.locatie = company.locatie;
-        this.contact_informatie = company.contact_informatie;
+        this.validationInfo = company.validationInfo;
         this.projects = company.projects ?? [];
+        this.user_id = company.user_id;
 
         // Validate after properties are set
         this.validate();
@@ -35,7 +38,7 @@ export class Company {
             throw new Error('Company location is required.');
         }
 
-        if (!this.contact_informatie?.trim()) {
+        if (!this.validationInfo?.trim()) {
             throw new Error('Company contact information is required.');
         }
     }
@@ -47,7 +50,8 @@ export class Company {
             id: data.id,
             naam: data.naam,
             locatie: data.locatie,
-            contact_informatie: data.contact_informatie,
+            validationInfo: data.validationInfo,
+            user_id: data.user_id,
             projects: data.projects.map(Project.from), // Map projects using the Project class's from method
         });
     }
