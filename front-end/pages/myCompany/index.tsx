@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { fetchMyCompany } from "@/services/CompanyService";
-import styles from "../../styles/MyCompany.module.css";
+import { fetchCompanyEmployees } from "@/services/EmployeeService";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import ProjectList from "@/components/ProjectList";
+import EmployeeList from "@/components/EmployeeList";
+import ProjectFormPopup from "@/components/ProjectFormPopup";
+import EmployeeFormPopup from "../../components/EmployeeFormPopup"; // Popup form for employees
+import styles from "../../styles/MyCompany.module.css";
 
 interface DecodedToken {
   role: string;
@@ -15,6 +21,8 @@ interface Company {
   naam: string;
   locatie: string;
   validationInfo: string;
+  projects: any[];
+  employees: any[];
 }
 
 const MyCompany = () => {
@@ -22,76 +30,109 @@ const MyCompany = () => {
   const [company, setCompany] = useState<Company | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isClient, setIsClient] = useState(false); // Add this flag
+  const [showProjectModal, setShowProjectModal] = useState(false);
+  const [showEmployeeModal, setShowEmployeeModal] = useState(false);
+  const [employees, setEmployees] = useState<any[]>([]);
+
+  const loadCompany = async () => {
+    try {
+      const companyData = await fetchMyCompany();
+      const employeeData = await fetchCompanyEmployees();
+      const normalizedData: Company = {
+        ...companyData,
+        projects: companyData.projects || [],
+        employees: companyData.employees || [],
+      };
+      setEmployees(employeeData);
+      setCompany(normalizedData);
+    } catch (err: any) {
+      setError(err.message || "Failed to load company data.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    setIsClient(true); // Ensures rendering happens only after hydration
-  }, []);
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+      router.push("/login");
+      return;
+    }
 
-  useEffect(() => {
-    if (!isClient) return;
+    const decoded: DecodedToken = jwtDecode(token);
+    if (decoded.role !== "Company") {
+      router.push("/");
+      return;
+    }
 
-    const fetchUserCompany = async () => {
-      const token = sessionStorage.getItem("token");
-
-      if (!token) {
-        setError("You are not logged in. Redirecting...");
-        setTimeout(() => router.push("/login"), 3000);
-        return;
-      }
-
-      try {
-        const decoded: DecodedToken = jwtDecode(token);
-
-        if (decoded.role !== "Company") {
-          setError("You do not have access to this page. Redirecting...");
-          setTimeout(() => router.push("/"), 3000);
-          return;
-        }
-
-        const companyData = await fetchMyCompany(); // Fetch the user's company
-        setCompany(companyData);
-      } catch (err) {
-        setError("An error occurred while fetching your company.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserCompany();
-  }, [isClient, router]);
-
-  if (!isClient) {
-    // Avoid rendering mismatched content on the server
-    return null;
-  }
+    loadCompany();
+  }, [router]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p className={styles.error}>{error}</p>;
 
   return (
-
-    
     <div className={styles.myCompanyPage}>
-      {company ? (
+      <Header />
+      <main>
+      <h1 className={styles.myCompanyTitle}>My Company</h1>
+
+      {company && (
         <>
-        <Header />
-          <h1 className={styles.myCompanyTitle}>My Company</h1>
-          <div className={styles.myCompanyCard}>
-            <p className={styles.myCompanyCardTitle}>Name:</p>
-            <p className={styles.myCompanyCardText}>{company.naam}</p>
-
-            <p className={styles.myCompanyCardTitle}>Location:</p>
-            <p className={styles.myCompanyCardText}>{company.locatie}</p>
-
-            <p className={styles.myCompanyCardTitle}>Contact Info:</p>
-            <p className={styles.myCompanyCardText}>{company.validationInfo}</p>
+          <div className={styles.companyDetails}>
+            <p><strong>Name:</strong> {company.naam}</p>
+            <p><strong>Location:</strong> {company.locatie}</p>
+            <p><strong>Description:</strong> {company.validationInfo}</p>
           </div>
+
+          <div className={styles.contentGrid}>
+            {/* Projects Section */}
+            <div className={styles.section}>
+              <div className={styles.sectionHeader}>
+                <h2 className={styles.categorize}>Projects</h2>
+                <button
+                  className={styles.openProjectButton}
+                  onClick={() => setShowProjectModal(true)}
+                >
+                  Create New Project
+                </button>
+              </div>
+              <ProjectList projects={company.projects} />
+            </div>
+
+            {/* Employees Section */}
+            <div className={styles.section}>
+              <div className={styles.sectionHeader}>
+                <h2 className={styles.categorize}>Employees</h2>
+                <button
+                  className={styles.openProjectButton}
+                  onClick={() => setShowEmployeeModal(true)}
+                >
+                  Add New Employee
+                </button>
+              </div>
+              <EmployeeList employees={employees} />
+            </div>
+          </div>
+
+          {/* Modals */}
+          <ProjectFormPopup
+            show={showProjectModal}
+            onClose={() => setShowProjectModal(false)}
+            onSuccess={loadCompany}
+          />
+
+          <EmployeeFormPopup
+            show={showEmployeeModal}
+            onClose={() => setShowEmployeeModal(false)}
+            onSuccess={loadCompany}
+          />
         </>
-      ) : (
-        <p>No company data available.</p>
       )}
-    </div>
+      </main>
+      <Footer/>
+    </div> 
+  
   );
 };
 

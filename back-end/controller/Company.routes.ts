@@ -4,6 +4,7 @@ import { CompanyInput, ProjectInput } from '../types';
 import jwt from "jsonwebtoken";
 import userService from '../service/User.service';
 
+
 const router = express.Router();
 const jwtSecret = process.env.JWT_SECRET;
 if (!jwtSecret) {
@@ -77,7 +78,33 @@ router.get('/myCompany', async (req: Request, res: Response, next: NextFunction)
       next(error);
     }
   });
-  
+
+// router.post('/employees', async (req: Request, res: Response, next: NextFunction) => {
+//   try {
+//     // Validate the token
+//     const token = req.headers.authorization?.split(' ')[1];
+//     if (!token) return res.status(401).json({ error: 'Unauthorized. No token provided.' });
+
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { id: number };
+//     const userId = decoded.id;
+
+//     // Get employee data from the request body
+//     const { name, email, phone } = req.body;
+
+//     if (!name || !email || !phone) {
+//       return res.status(400).json({ error: 'Name, email, and phone are required.' });
+//     }
+
+//     const employee = await employeeService.addEmployeeToCompany(userId, name, email, phone);
+
+//     res.status(201).json({
+//       message: 'Employee added successfully.',
+//       employee,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// });
   
   
   
@@ -188,5 +215,105 @@ router.post('/:id/projects', async (req: Request, res: Response, next: NextFunct
         next(error);
     }
 });
+
+// const verifyCompany = (req: Request, res: Response, next: NextFunction) => {
+//   try {
+//     const authHeader = req.headers.authorization;
+
+//     if (!authHeader || !authHeader.startsWith("Bearer ")) {
+//       return res.status(401).json({ error: "Unauthorized access: Missing token." });
+//     }
+
+//     const token = authHeader.split(" ")[1];
+//     const decoded = jwt.verify(token, jwtSecret) as { id: number; role: string };
+
+//     console.log("Decoded JWT:", decoded); // Debugging
+
+//     if (decoded.role !== "Company") {
+//       return res.status(403).json({ error: "Forbidden: Only companies can access this resource." });
+//     }
+
+//     next(); // Proceed without modifying `req`
+//   } catch (error) {
+//     console.error("JWT verification failed:", error);
+//     return res.status(401).json({ error: "Invalid token." });
+//   }
+// };
+
+
+
+// // Add Employee to Company
+// router.post('/addEmployee', async (req: Request, res: Response, next: NextFunction) => {
+//   try {
+//     const authHeader = req.headers.authorization;
+//     if (!authHeader || !authHeader.startsWith('Bearer ')) {
+//       return res.status(401).json({ error: 'Unauthorized. Missing or invalid token.' });
+//     }
+
+//     const token = authHeader.split(' ')[1];
+//     const decoded: any = jwt.verify(token, jwtSecret);
+
+//     if (decoded.role !== 'Company') {
+//       return res.status(403).json({ error: 'Forbidden: Only companies can add employees.' });
+//     }
+
+//     const { email, telefoonnummer } = req.body;
+
+//     if (!email || !telefoonnummer) {
+//       return res.status(400).json({ error: 'Email and phone number are required.' });
+//     }
+
+//     const company = await companyService.getCompanyByUserId(decoded.id);
+//     if (!company) {
+//       return res.status(404).json({ error: 'No company found for this user.' });
+//     }
+
+//     if (company.id === undefined) {
+//       return res.status(400).json({ error: 'Company ID is undefined.' });
+//     }
+//     const employee = await companyService.addEmployeeToCompany(company.id, email, telefoonnummer);
+
+//     res.status(201).json({ message: 'Employee added successfully.', employee });
+//   } catch (error) {
+//     console.error('Error adding employee:', error);
+//     next(error);
+//   }
+// });
+
+
+// // Get All Employees for a Company
+// router.get("/employees", async (req: Request, res: Response, next: NextFunction) => {
+//   const jwtSecret = process.env.JWT_SECRET;
+
+//   try {
+//     const authHeader = req.headers.authorization;
+
+//     if (!authHeader || !authHeader.startsWith("Bearer ")) {
+//       return res.status(401).json({ error: "Unauthorized: Missing or invalid token." });
+//     }
+
+//     const token = authHeader.split(" ")[1];
+//     const decoded = jwt.verify(token, jwtSecret!) as { id: number; role: string };
+
+//     console.log("Route: Decoded JWT:", decoded);
+
+//     if (!decoded || decoded.role !== "Company" || !decoded.id) {
+//       return res.status(403).json({ error: "Forbidden: Only companies can access this resource." });
+//     }
+
+//     const companyId = decoded.id;
+
+//     const employees = await companyService.getEmployeesForCompany(companyId);
+
+//     res.status(200).json(employees);
+//   } catch (error) {
+//     console.error("Route: Error fetching employees:", error);
+//     next(error);
+//   }
+// });
+
+
+
+
 
 export default router;

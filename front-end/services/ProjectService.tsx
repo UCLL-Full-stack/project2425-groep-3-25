@@ -1,17 +1,24 @@
 import useSWR from "swr";
 
-// Interfaces for Project Data
+// Interfaces for Project and Employee Data
 export interface ProjectInput {
   naam: string;
   beschrijving: string;
   datum_voltooid: string; // Format: YYYY-MM-DD
+  categoryName: string; // New: Pass category name instead of ID
 }
 
 export interface Project extends ProjectInput {
   id: number;
+  company_id: number;
+  category_id: number;
 }
 
-// Base URL for API
+export interface EmployeeInput {
+  employeeEmail: string;
+  role: string;
+}
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
 
 // Fetcher function for SWR
@@ -52,11 +59,7 @@ export const fetchProjects = async (): Promise<Project[]> => {
     throw new Error(errorData.error || "Failed to fetch projects");
   }
 
-  const data = await response.json();
-  return data.map((project: any) => ({
-    ...project,
-    datum_voltooid: project.datum_voltooid || "",
-  }));
+  return response.json();
 };
 
 // Fetch a single project by ID
@@ -103,6 +106,33 @@ export const createProject = async (projectData: ProjectInput): Promise<Project>
 
   return response.json();
 };
+
+// // Add an employee to a project
+// export const addEmployeeToProject = async (
+//   projectId: number,
+//   employeeData: EmployeeInput
+// ): Promise<void> => {
+//   const token = sessionStorage.getItem("token");
+//   if (!token) {
+//     throw new Error("User not authenticated");
+//   }
+
+//   const response = await fetch(`${API_BASE_URL}/projects/${projectId}/addEmployee`, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: `Bearer ${token}`,
+//     },
+//     body: JSON.stringify(employeeData),
+//   });
+
+//   if (!response.ok) {
+//     const errorData = await response.json();
+//     throw new Error(
+//       `Error ${response.status}: ${errorData.error || "Failed to add employee to project"}`
+//     );
+//   }
+// };
 
 // Update an existing project
 export const updateProject = async (

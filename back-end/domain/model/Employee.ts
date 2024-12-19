@@ -1,60 +1,47 @@
-import { Employee as EmployeePrisma } from '@prisma/client';
+import { Employee as EmployeePrisma } from "@prisma/client";
 
 export class Employee {
-    readonly id?: number;
-    readonly naam: string;
-    readonly email: string;
-    readonly telefoonnummer: string;
+  readonly id?: number;
+  readonly naam: string;
+  readonly email: string;
+  readonly telefoonnummer: string;
+  readonly bedrijf_id: number;
 
-    constructor(employee: {
-        id?: number;
-        naam: string;
-        email: string;
-        telefoonnummer: string;
-    }) {
-        this.validate(employee);
+  constructor(employee: {
+    id?: number;
+    naam: string;
+    email: string;
+    telefoonnummer: string;
+    bedrijf_id: number;
+  }) {
+    this.id = employee.id;
+    this.naam = employee.naam;
+    this.email = employee.email;
+    this.telefoonnummer = employee.telefoonnummer;
+    this.bedrijf_id = employee.bedrijf_id;
 
-        this.id = employee.id;
-        this.naam = employee.naam;
-        this.email = employee.email;
-        this.telefoonnummer = employee.telefoonnummer;
+    this.validate();
+  }
+
+  private validate() {
+    if (!this.naam?.trim()) {
+      throw new Error("Employee name is required.");
     }
-
-    private validate(employee: {
-        id?: number;
-        naam: string;
-        email: string;
-        telefoonnummer: string;
-    }) {
-        if (!employee.naam?.trim()) {
-            throw new Error('Employee name is required.');
-        }
-
-        if (!employee.email?.trim()) {
-            throw new Error('Employee email is required.');
-        }
-
-        if (!this.validateEmail(employee.email)) {
-            throw new Error('Invalid email format.');
-        }
-
-        if (!employee.telefoonnummer?.trim()) {
-            throw new Error('Employee phone number is required.');
-        }
+    if (!this.email?.trim()) {
+      throw new Error("Employee email is required.");
     }
-
-    private validateEmail(email: string): boolean {
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return regex.test(email);
+    if (!this.telefoonnummer?.trim()) {
+      throw new Error("Employee phone number is required.");
     }
+  }
 
-    // Static from method to convert Prisma object to domain model
-    static from(data: EmployeePrisma): Employee {
-        return new Employee({
-            id: data.id,
-            naam: data.naam,
-            email: data.email,
-            telefoonnummer: data.telefoonnummer,
-        });
-    }
+  static from(data: EmployeePrisma): Employee {
+    return new Employee({
+      id: data.id,
+      naam: data.naam,
+      email: data.email,
+      telefoonnummer: data.telefoonnummer,
+      bedrijf_id: data.bedrijf_id,
+    });
+  }
 }

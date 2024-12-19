@@ -1,4 +1,4 @@
-.projectPage {
+.employeePage {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(180deg, #111827, #1e293b);
   min-height: 100vh;
@@ -31,11 +31,11 @@
 
 .heroSubtitle {
   font-size: 1.2rem;
-  color: #e0e0e0;
+  color: #e2e8f0;
   max-width: 600px;
 }
 
-.projectForm {
+.employeeForm {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -65,7 +65,7 @@
 }
 
 .submitButton {
-  background-color: #407ace; 
+  background-color: #63b3ed; 
   color: #ffffff;
   padding: 0.8rem 1.5rem;
   font-size: 1.1rem;
@@ -74,23 +74,22 @@
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  box-shadow: 0 4px 10px rgba(64, 122, 206, 0.5); 
+  box-shadow: 0 4px 10px rgba(99, 179, 237, 0.5); 
 }
 
 .submitButton:hover {
-  background-color: #365d9e; 
+  background-color: #4a90d6; 
 }
 
-.projectGrid {
+.employeeGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
   width: 100%;
   max-width: 1200px;
-  
 }
 
-.projectCard {
+.employeeCard {
   background: rgba(255, 255, 255, 0.1);
   padding: 1.5rem;
   border-radius: 12px;
@@ -100,39 +99,39 @@
   color: #ffffff;
 }
 
-.projectCard:hover {
+.employeeCard:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
 }
 
-.projectCard h2 {
+.employeeCard h2 {
   font-size: 1.6rem;
-  color: #407ace; 
+  color: #407ace;
   margin-bottom: 0.5rem;
 }
 
-.projectCard p {
+.employeeCard p {
   font-size: 1rem;
   line-height: 1.5;
   margin-bottom: 1rem;
-  color: #e0e0e0;
+  color: #e2e8f0;
 }
 
-.projectCard button {
+.employeeCard button {
   margin-top: auto;
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
   font-weight: bold;
-  color: #407ace; 
+  color: #63b3ed; 
   background: transparent;
-  border: 2px solid #407ace; 
+  border: 2px solid #63b3ed; 
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s, transform 0.2s;
 }
 
-.projectCard button:hover {
-  background-color: #407ace; 
+.employeeCard button:hover {
+  background-color: #63b3ed; 
   color: #ffffff;
   transform: scale(1.05);
 }

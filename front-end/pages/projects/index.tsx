@@ -16,6 +16,7 @@ const ProjectsPage: React.FC = () => {
     naam: "",
     beschrijving: "",
     datum_voltooid: "",
+    categoryName: "", // Add the missing categoryName property
   });
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -56,7 +57,7 @@ const ProjectsPage: React.FC = () => {
     try {
       const addedProject = await createProject(newProject);
       setProjects((prev) => [...prev, addedProject]);
-      setNewProject({ naam: "", beschrijving: "", datum_voltooid: "" });
+      setNewProject({ naam: "", beschrijving: "", datum_voltooid: "", categoryName: "" });
       setError(null);
     } catch (error) {
       console.error("Error adding project:", error);
@@ -85,41 +86,8 @@ const ProjectsPage: React.FC = () => {
             </p>
           </section>
 
-          <div className={styles.projectForm}>
-            {error && <p className={styles.errorText}>{error}</p>}
-            <input
-              type="text"
-              name="naam"
-              value={newProject.naam}
-              onChange={handleInputChange}
-              placeholder="Project Name"
-              required
-              className={styles.inputField}
-            />
-            <textarea
-              name="beschrijving"
-              value={newProject.beschrijving}
-              onChange={handleInputChange}
-              placeholder="Description"
-              required
-              className={styles.inputField}
-            />
-            <input
-              type="date"
-              name="datum_voltooid"
-              value={newProject.datum_voltooid}
-              onChange={handleInputChange}
-              required
-              className={styles.inputField}
-            />
-            <button
-              onClick={handleAddProject}
-              className={styles.submitButton}
-              disabled={isLoading}
-            >
-              Add Project
-            </button>
-          </div>
+          
+          
 
           {isLoading ? (
             <p className={styles.loadingText}>Loading projects...</p>
@@ -130,7 +98,7 @@ const ProjectsPage: React.FC = () => {
               {projects.map((project) => (
                 <div key={project.id} className={styles.projectCard}>
                   <h2>{project.naam}</h2>
-                  <p>{project.beschrijving}</p>
+                  <p>Description: {project.beschrijving}</p>
                   <p>
                     Completion Date:{" "}
                     {new Date(project.datum_voltooid).toLocaleDateString()}

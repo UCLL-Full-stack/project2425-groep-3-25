@@ -5,35 +5,51 @@ import company from '../domain/model/Company'
 
 const prisma = new PrismaClient();
 
-const createProject = async ({
-  naam,
-  beschrijving,
-  datum_voltooid,
-  bedrijf_id,
-  categorie_id,
-}: ProjectInput): Promise<Project> => {
+interface ProjectInputWithCategoryName extends Omit<ProjectInput, "categorie_id"> {
+  categoryName: string; // Accept category name instead of ID
+}
+
+const createProject = async (projectData: ProjectInputWithCategoryName, email: string) => {
+  const { naam, beschrijving, datum_voltooid, categoryName } = projectData;
+
   try {
-    const parsedDate = new Date(datum_voltooid);
-    if (isNaN(parsedDate.getTime())) {
-      throw new Error('Invalid date format. Please provide a valid ISO-8601 date.');
-    }
-    const newProject = await prisma.project.create({
-      data: {
-        naam: naam || 'Default Naam',
-        beschrijving: beschrijving || 'Default Beschrijving',
-        datum_voltooid: parsedDate ,
-        company: {
-          connect: { id: bedrijf_id },
-        },
-        category: {
-          connect: { id: categorie_id },
+    // Find the company associated with the user's email
+    const company = await prisma.company.findFirst({
+      where: {
+        user: {
+          email: email, // Match user email
         },
       },
     });
-    return Project.from(newProject);
+
+    if (!company) {
+      throw new Error("Company not found for the logged-in user.");
+    }
+
+    // Find the category by name
+    const category = await prisma.category.findFirst({
+      where: { naam: categoryName },
+    });
+
+    if (!category) {
+      throw new Error("Category not found. Please provide a valid category name.");
+    }
+
+    // Create the project with resolved company and category IDs
+    const newProject = await prisma.project.create({
+      data: {
+        naam,
+        beschrijving,
+        datum_voltooid: new Date(datum_voltooid),
+        bedrijf_id: company.id,   // Automatically set the company ID
+        categorie_id: category.id, // Resolved category ID
+      },
+    });
+
+    return newProject;
   } catch (error) {
-    console.error(error);
-    throw new Error('An error occurred while creating the project');
+    console.error("Error creating project:", error);
+    throw new Error("Failed to create project.");
   }
 };
 

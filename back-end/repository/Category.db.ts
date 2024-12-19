@@ -3,25 +3,25 @@ import { Category } from '../domain/model/Category';
 
 const prisma = new PrismaClient();
 
-const createCategory = async ({
-  naam,
-  beschrijving,
-}: {
-  naam: string;
-  beschrijving: string;
-}): Promise<Category> => {
-  try {
-    const newCategory = await prisma.category.create({
-      data: {
-        naam,
-        beschrijving,
-      },
-    });
-    return Category.from(newCategory);
-  } catch (error) {
-    console.error(error);
-    throw new Error('An error occurred while creating the category');
+const createCategory = async (categoryData: { naam: string; beschrijving: string }) => {
+  // Check if a category with the same name already exists
+  const existingCategory = await prisma.category.findUnique({
+    where: { naam: categoryData.naam },
+  });
+
+  if (existingCategory) {
+    throw new Error(`Category with name "${categoryData.naam}" already exists.`);
   }
+
+  // Create the category if it doesn't exist
+  const newCategory = await prisma.category.create({
+    data: {
+      naam: categoryData.naam,
+      beschrijving: categoryData.beschrijving,
+    },
+  });
+
+  return newCategory;
 };
 
 const getCategoryById = async ({
@@ -32,6 +32,7 @@ const getCategoryById = async ({
   try {
     const category = await prisma.category.findUnique({
       where: { id },
+      include: { projects: true }
     });
     return category ? Category.from(category) : null;
   } catch (error) {
@@ -42,7 +43,9 @@ const getCategoryById = async ({
 
 const getAllCategories = async (): Promise<Category[]> => {
   try {
-    const categories = await prisma.category.findMany();
+    const categories = await prisma.category.findMany({
+      include: { projects: true }
+    });
     return categories.map(Category.from);
   } catch (error) {
     console.error(error);
@@ -61,6 +64,7 @@ const updateCategory = async (
     const updatedCategory = await prisma.category.update({
       where: { id },
       data: updatedData,
+      include: { projects: true }
     });
     return Category.from(updatedCategory);
   } catch (error) {

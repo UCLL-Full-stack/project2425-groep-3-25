@@ -1,9 +1,15 @@
 import express, { NextFunction, Request, Response } from 'express';
 import projectService from '../service/Project.service';
+import companyService from '../service/Company.service';
 import { ProjectInput } from '../types';
+import jwt  from 'jsonwebtoken';
 
 const router = express.Router();
 
+const jwtSecret = process.env.JWT_SECRET;
+if (!jwtSecret) {
+  throw new Error('JWT_SECRET is not defined in the environment variables');
+}
 /**
  * @swagger
  * tags:
@@ -95,16 +101,30 @@ router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
  *       400:
  *         description: Validation error
  */
-router.post('/', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const projectInput: ProjectInput = req.body;
-        const project = await projectService.createProject(projectInput);
-        res.status(201).json(project);
-    } catch (error) {
-        next(error);
+router.post("/", async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      return res.status(401).json({ error: "Unauthorized. Token is required." });
     }
-});
 
+    // Decode token to extract email
+    const jwtSecret = process.env.JWT_SECRET || "default_secret";
+    const decoded = jwt.verify(token, jwtSecret) as { email: string };
+
+    if (!decoded.email) {
+      return res.status(401).json({ error: "Invalid token." });
+    }
+
+    const projectData = req.body;
+
+    // Create the project
+    const newProject = await projectService.createProject(projectData, decoded.email);
+    res.status(201).json(newProject);
+  } catch (error) {
+    next(error);
+  }
+});
 /**
  * @swagger
  * /projects/{id}:

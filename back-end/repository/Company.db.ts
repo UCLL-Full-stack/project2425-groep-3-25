@@ -47,22 +47,28 @@ const getCompanyByUserId = async (userId: number): Promise<Company | null> => {
 };
 
 
-const getCompanyById = async ({
-  id,
-}: {
-  id: number;
-}): Promise<Company | null> => {
+const getCompanyById = async ({ id }: { id: number }): Promise<Company | null> => {
+  console.log('Repository - Received id:', id); // Debugging
+
+  if (!id) {
+    throw new Error('Company ID is required.');
+  }
+
   try {
     const company = await prisma.company.findUnique({
       where: { id },
       include: { projects: true },
     });
+
+    console.log('Repository - Company found:', company); // Debugging
     return company ? Company.from(company) : null;
   } catch (error) {
-    console.error(error);
-    throw new Error('An error occurred while finding the company by ID');
+    console.error('Error fetching company by ID:', error);
+    throw new Error('Failed to retrieve company.');
   }
 };
+
+
 
 const getAllCompanies = async (): Promise<Company[]> => {
   try {
@@ -75,6 +81,47 @@ const getAllCompanies = async (): Promise<Company[]> => {
     throw new Error('An error occurred while retrieving all companies');
   }
 };
+export const addEmployeeToCompany = async (companyId: number, userEmail: string, telefoonnummer: string) => {
+  // Validate that the user exists and doesn't already have an employee record
+  const existingUser = await prisma.user.findUnique({
+    where: { email: userEmail },
+    include: { employee: true },
+  });
+
+  if (!existingUser) {
+    throw new Error("User not found.");
+  }
+
+  if (existingUser.employee) {
+    throw new Error("User is already assigned as an employee.");
+  }
+
+  // Create the employee and associate it with the company
+  const newEmployee = await prisma.employee.create({
+    data: {
+      naam: `${existingUser.firstName} ${existingUser.lastName}`,
+      email: existingUser.email,
+      telefoonnummer,
+      bedrijf_id: companyId,
+      user_id: existingUser.id,
+    },
+  });
+
+  return newEmployee;
+};
+
+// export const getEmployeesByCompanyId = async (companyId: number) => {
+//   if (!companyId) {
+//     console.error('Repository - companyId is undefined or null');
+//     throw new Error('Company ID is required in the repository.');
+//   }
+
+//   console.log('Repository - Fetching employees for companyId:', companyId); // Debugging
+//   return await prisma.employee.findMany({
+//     where: { bedrijf_id: companyId },
+//     include: { user: true },
+//   });
+// };
 
 const updateCompany = async (
   id: number,

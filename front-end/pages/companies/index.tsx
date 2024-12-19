@@ -11,7 +11,8 @@ interface Company {
   id: number;
   naam: string;
   locatie: string;
-  contact_informatie: string;
+  validationInfo: string;
+  user_id: number;
   projects: {
     id: number;
     naam: string;
@@ -33,7 +34,7 @@ const CompaniesPage: React.FC = () => {
         const companiesWithId = data.map((company, index) => ({
           ...company,
           id: index + 1,
-          projects: company.projects || []
+          projects: company.projects || [],
         }));
         setCompanies(companiesWithId);
       } catch (error) {
@@ -50,11 +51,21 @@ const CompaniesPage: React.FC = () => {
   const closeModal = () => setIsModalOpen(false);
 
   const handleCompanyCreated = (
-    companyInput: Omit<Company, "id" | "projects">
+    company: {
+      naam: string;
+      locatie: string;
+      contact_informatie: string;
+      telefoonnummer: string;
+      contact_method: string;
+      additional_info?: string;
+    }
   ) => {
     const newCompany: Company = {
       id: companies.length + 1,
-      ...companyInput,
+      naam: company.naam,
+      locatie: company.locatie,
+      validationInfo: "",
+      user_id: 0,
       projects: [],
     };
     setCompanies((prevCompanies) => [...prevCompanies, newCompany]);
@@ -80,18 +91,18 @@ const CompaniesPage: React.FC = () => {
             projects they've completed and contributed to.
           </p>
 
-          <div className={styles.buttonContainer}>
+          {/* <div className={styles.buttonContainer}>
             <button className={styles.partnerButton} onClick={openModal}>
               Apply to be a Partner
             </button>
-          </div>
+          </div> */}
 
-          {isModalOpen && (
+          {/* {isModalOpen && (
             <PartnerApplicationForm
               closeModal={closeModal}
               onCompanyCreated={handleCompanyCreated}
             />
-          )}
+          )} */}
 
           {isLoading ? (
             <p className={styles.loading}>Loading companies...</p>

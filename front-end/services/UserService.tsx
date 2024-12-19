@@ -16,6 +16,13 @@ export interface RegisterInput {
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000"
 
 export const signUp = async (signUpData: RegisterInput): Promise<any> => {
+
+  if (signUpData.role === "Company") {
+    if (!signUpData.companyName || !signUpData.locatie || !signUpData.validationInfo) {
+      throw new Error("Company registration requires companyName, locatie, and validationInfo.");
+    }
+  }
+
   const response = await fetch(`${API_BASE_URL}/users/signUp`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

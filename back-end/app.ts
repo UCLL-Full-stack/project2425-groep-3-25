@@ -7,6 +7,8 @@ import swaggerUi from 'swagger-ui-express';
 import companyRoutes from './controller/Company.routes';
 import projectRoutes from './controller/Project.routes';
 import userRoutes from './controller/User.routes';
+import categoryRoutes from './controller/Category.routes';
+import employeeRoutes from './controller/Employee.Routes';
 import { expressjwt } from 'express-jwt';
 
 const app = express();
@@ -53,6 +55,9 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/companies', companyRoutes);
 app.use('/projects', projectRoutes);
 app.use('/users', userRoutes);
+app.use("/categories", categoryRoutes);
+app.use("/employees", employeeRoutes);
+
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });

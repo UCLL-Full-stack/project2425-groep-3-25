@@ -1,0 +1,69 @@
+/* .projectListContainer {
+  margin-top: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px); */
+
+.projectListTitle {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #407ace;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.projectList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.projectCard {
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.projectCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+.projectCard h2 {
+  font-size: 1.6rem;
+  color: #407ace;
+  margin-bottom: 0.5rem;
+}
+
+.projectCard p {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  color: #e0e0e0;
+}
+
+.projectCard button {
+  margin-top: auto;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #407ace;
+  background: transparent;
+  border: 2px solid #407ace;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, transform 0.2s;
+}
+
+.projectCard button:hover {
+  background-color: #407ace;
+  color: #ffffff;
+  transform: scale(1.05);
+}

@@ -1,0 +1,103 @@
+"filename", "language", "Markdown", "TypeScript", "JSON with Comments", "TypeScript JSX", "JavaScript", "JSON", "XML", "CSS", "Prisma", "MS SQL", "comment", "blank", "total"
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\README.md", "Markdown", 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 9
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\analysis\README.md", "Markdown", 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 9
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\.prettierrc", "JSON", 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 1, 6
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\README.md", "Markdown", 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19, 46
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\app.ts", "TypeScript", 0, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 75
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\controller\Category.routes.ts", "TypeScript", 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 5, 8, 62
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\controller\Company.routes.ts", "TypeScript", 0, 98, 0, 0, 0, 0, 0, 0, 0, 0, 98, 24, 220
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\controller\Project.routes.ts", "TypeScript", 0, 73, 0, 0, 0, 0, 0, 0, 0, 0, 115, 12, 200
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\controller\User.routes.ts", "TypeScript", 0, 114, 0, 0, 0, 0, 0, 0, 0, 0, 117, 37, 268
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\domain\model\Category.ts", "TypeScript", 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 1, 8, 49
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\domain\model\Company.ts", "TypeScript", 0, 48, 0, 0, 0, 0, 0, 0, 0, 0, 4, 11, 63
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\domain\model\Employee.ts", "TypeScript", 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 1, 10, 61
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\domain\model\Project.ts", "TypeScript", 0, 51, 0, 0, 0, 0, 0, 0, 0, 0, 1, 9, 61
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\domain\model\User.ts", "TypeScript", 0, 59, 0, 0, 0, 0, 0, 0, 0, 0, 1, 13, 73
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\jest.config.js", "JavaScript", 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 1, 0, 7
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\package-lock.json", "JSON", 0, 0, 0, 0, 0, 6279, 0, 0, 0, 0, 0, 1, 6280
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\package.json", "JSON", 0, 0, 0, 0, 0, 57, 0, 0, 0, 0, 0, 1, 58
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\Category.db.ts", "TypeScript", 0, 84, 0, 0, 0, 0, 0, 0, 0, 0, 2, 12, 98
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\Company.db.ts", "TypeScript", 0, 120, 0, 0, 0, 0, 0, 0, 0, 0, 0, 17, 137
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\Employee.db.ts", "TypeScript", 0, 24, 0, 0, 0, 0, 0, 0, 0, 0, 2, 6, 32
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\Project.db.ts", "TypeScript", 0, 116, 0, 0, 0, 0, 0, 0, 0, 0, 3, 16, 135
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\User.db.ts", "TypeScript", 0, 116, 0, 0, 0, 0, 0, 0, 0, 0, 13, 14, 143
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\prisma\migrations\20241113170249_initial\migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 9, 14, 63
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\prisma\migrations\20241113171854_relationships_added\migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 21, 12, 51
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\prisma\migrations\20241113172926_fix_relationship_user\migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 4, 5, 20
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\prisma\migrations\20241211130207_password\migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 13, 6, 25
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\prisma\migrations\20241211133249_rem_role_in_user\migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 1, 9
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\prisma\migrations\20241215180008_added_role\migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 1, 9
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\prisma\migrations\20241215180235_added_role\migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\prisma\migrations\20241215181729_\migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 7, 4, 14
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\prisma\migrations\20241215181941_\migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 7, 1, 10
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\prisma\migrations\20241215182010_\migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\prisma\migrations\20241216131812_\migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 10, 2, 16
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\prisma\migrations\20241216131827_\migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\prisma\migrations\20241216170259_\migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 1, 9
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\prisma\migrations\20241216170316_\migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\prisma\migrations\20241216170806_\migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 9, 1, 13
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\prisma\migrations\20241217113035_\migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 9, 3, 15
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\prisma\migrations\20241217113051_\migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\prisma\migrations\20241217123024_add_unique_to_category_name\migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 1, 9
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\repository\prisma\schema.prisma", "Prisma", 0, 0, 0, 0, 0, 0, 0, 0, 74, 0, 1, 14, 89
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\service\Category.service.ts", "TypeScript", 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 35
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\service\Company.service.ts", "TypeScript", 0, 103, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 119
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\service\Employee.service.ts", "TypeScript", 0, 18, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4, 24
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\service\Project.service.ts", "TypeScript", 0, 58, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 69
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\service\User.service.ts", "TypeScript", 0, 103, 0, 0, 0, 0, 0, 0, 0, 0, 11, 36, 150
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\test\model\Category.test.ts", "TypeScript", 0, 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 36
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\test\model\Company.test.ts", "TypeScript", 0, 68, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 77
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\test\model\Employee.test.ts", "TypeScript", 0, 51, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 58
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\test\model\Project.test.ts", "TypeScript", 0, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 40
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\test\model\User.test.ts", "TypeScript", 0, 74, 0, 0, 0, 0, 0, 0, 0, 0, 0, 17, 91
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\test\service\CompanyService.test.ts", "TypeScript", 0, 88, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 113
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\test\service\ProjectService.test.ts", "TypeScript", 0, 81, 0, 0, 0, 0, 0, 0, 0, 0, 0, 21, 102
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\test\service\UserService.test.ts", "TypeScript", 0, 146, 0, 0, 0, 0, 0, 0, 0, 0, 0, 35, 181
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\tsconfig.json", "JSON with Comments", 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 1, 10
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\types\index.ts", "TypeScript", 0, 47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 55
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\types\jwt.ts", "TypeScript", 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 13
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\back-end\util\seed.ts", "TypeScript", 0, 96, 0, 0, 0, 0, 0, 0, 0, 0, 5, 12, 113
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\README.md", "Markdown", 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 41
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\components\CompanyCard.tsx", "TypeScript JSX", 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 5, 33
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\components\EmployeeList.tsx", "TypeScript JSX", 0, 0, 0, 33, 0, 0, 0, 0, 0, 0, 0, 5, 38
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\components\Footer.tsx", "TypeScript JSX", 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 3, 15
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\components\Header.tsx", "TypeScript JSX", 0, 0, 0, 62, 0, 0, 0, 0, 0, 0, 0, 10, 72
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\components\LoginPopUp.tsx", "TypeScript JSX", 0, 0, 0, 251, 0, 0, 0, 0, 0, 0, 20, 30, 301
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\components\PartnerApplicationForm.tsx", "TypeScript JSX", 0, 0, 0, 139, 0, 0, 0, 0, 0, 0, 0, 12, 151
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\components\ProjectForm.tsx", "TypeScript JSX", 0, 0, 0, 79, 0, 0, 0, 0, 0, 0, 0, 12, 91
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\components\ProjectList.tsx", "TypeScript JSX", 0, 0, 0, 33, 0, 0, 0, 0, 0, 0, 0, 5, 38
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\components\ProtectedRoute.tsx", "TypeScript JSX", 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 6, 22
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\next.config.mjs", "JavaScript", 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 1, 2, 7
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\package-lock.json", "JSON", 0, 0, 0, 0, 0, 2262, 0, 0, 0, 0, 0, 1, 2263
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\package.json", "JSON", 0, 0, 0, 0, 0, 33, 0, 0, 0, 0, 0, 1, 34
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\pages\_app.tsx", "TypeScript JSX", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 1, 5, 23
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\pages\_document.tsx", "TypeScript JSX", 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 2, 14
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\pages\api\hello.ts", "TypeScript", 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 14
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\pages\companies\index.tsx", "TypeScript JSX", 0, 0, 0, 113, 0, 0, 0, 0, 0, 0, 0, 13, 126
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\pages\employees\index.tsx", "TypeScript JSX", 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 6, 21
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\pages\index.tsx", "TypeScript JSX", 0, 0, 0, 79, 0, 0, 0, 0, 0, 0, 0, 9, 88
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\pages\login\index.tsx", "TypeScript JSX", 0, 0, 0, 177, 0, 0, 0, 0, 0, 0, 0, 20, 197
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\pages\myCompany\index.tsx", "TypeScript JSX", 0, 0, 0, 78, 0, 0, 0, 0, 0, 0, 2, 13, 93
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\pages\projects\index.tsx", "TypeScript JSX", 0, 0, 0, 138, 0, 0, 0, 0, 0, 0, 0, 12, 150
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\public\next.svg", "XML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\public\vercel.svg", "XML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\services\CategoryService.tsx", "TypeScript JSX", 0, 0, 0, 107, 0, 0, 0, 0, 0, 0, 8, 24, 139
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\services\CompanyService.tsx", "TypeScript JSX", 0, 0, 0, 121, 0, 0, 0, 0, 0, 0, 8, 29, 158
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\services\ProjectService.tsx", "TypeScript JSX", 0, 0, 0, 132, 0, 0, 0, 0, 0, 0, 32, 31, 195
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\services\UserService.tsx", "TypeScript JSX", 0, 0, 0, 44, 0, 0, 0, 0, 0, 0, 0, 11, 55
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\styles\Companies.module.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 82, 0, 0, 0, 11, 93
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\styles\EmployeeList.module.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 7, 47
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\styles\Footer.module.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 2, 18
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\styles\Header.module.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 103, 0, 0, 0, 15, 118
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\styles\Home.module.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 111, 0, 0, 0, 17, 128
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\styles\LoginPopUp.module.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 105, 0, 0, 0, 14, 119
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\styles\MyCompany.module.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 76, 0, 0, 0, 10, 86
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\styles\Project.module.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 121, 0, 0, 0, 17, 138
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\styles\ProjectForm.module.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 9, 72
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\styles\ProjectList.module.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 7, 47
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\styles\globals.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 94, 0, 0, 0, 14, 108
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\tsconfig.json", "JSON with Comments", 0, 0, 34, 0, 0, 0, 0, 0, 0, 0, 0, 1, 35
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\types\index.ts", "TypeScript", 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 8
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\front-end\utils\authUtils.ts", "TypeScript", 0, 19, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 23
+"c:\Users\Leon\Documents\school\jaar 2\semester 1\Software Development\projecten\project2425-groep-3-25\package-lock.json", "JSON", 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 1, 7
+"Total", "-", 63, 2180, 43, 1686, 10, 8642, 2, 851, 74, 94, 579, 939, 15163

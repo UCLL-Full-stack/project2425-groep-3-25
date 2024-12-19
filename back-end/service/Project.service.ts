@@ -14,10 +14,18 @@ const getProjectById = async ({ id }: { id: number }): Promise<Project | null> =
     return project;
 };
 
-const createProject = async (projectData: ProjectInput): Promise<Project> => {
-    validateProjectData(projectData);
-    return await projectDb.createProject(projectData);
+interface ProjectInputWithCategoryName extends Omit<ProjectInput, "categorie_id"> {
+  categoryName: string; // Accept category name instead of ID
+}
+
+const createProject = async (projectData: ProjectInputWithCategoryName, email: string) => {
+  if (!projectData.naam || !projectData.beschrijving || !projectData.datum_voltooid || !projectData.categoryName) {
+    throw new Error("All fields (name, description, date, and category) are required.");
+  }
+  return await projectDb.createProject(projectData, email);
 };
+
+  
 
 const updateProject = async (
     id: number,
