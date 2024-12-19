@@ -1,7 +1,7 @@
 import { User } from "../domain/model/User"
 import * as userDb from "../repository/User.db"
 import * as companyDb from "../repository/Company.db"
-import * as employeeDb from "../repository/Employee.db"
+
 import { Role, UserInput } from "../types"
 import * as bcrypt from 'bcrypt'
 import { generateJwtToken } from "../types/jwt";
@@ -18,15 +18,7 @@ const getUserById = async ({id}: {id: number}) => {
     return user;
   }
 
-// const getUserByUsername = async ({ username } :{ username : string }): Promise<User> => {
 
-   
-//     const user = await userDb.getUserByUsername({ username });
-//     if (!user) {
-//         throw new Error('User not found');
-//     }
-//     return user;
-// }
 
 const createUser = async (userData: UserInput): Promise<User> => {
   const { firstName, lastName, email, password, role, companyName, locatie, validationInfo } = userData;
@@ -50,20 +42,20 @@ const createUser = async (userData: UserInput): Promise<User> => {
     role,
     validate(user){}
   });
-  console.log('Created User:', newUser); // Debugging - Check the new user ID
+  console.log('Created User:', newUser); 
 
-  // Only create company if role is "Company"
+
   if (role === 'Company') {
     if (!companyName || !locatie) {
       throw new Error('Company name and location are required for Company accounts.');
     }
 
-    // Pass newUser.id explicitly to createCompany
+   
     await companyDb.createCompany({
       naam: companyName,
       locatie,
       validationInfo: validationInfo || '',
-      user_id: newUser.id, // Ensure the user ID is passed
+      user_id: newUser.id,
     });
   }
 
@@ -98,13 +90,13 @@ const authenticate = async ({ email, password }: UserInput) => {
       throw new Error('Invalid username or password.');
     }
   
-    // Compare provided password with hashed password
+    
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       throw new Error('Invalid username or password.');
     }
   
-    // Generate JWT token
+    
     if (!user.id) {
       throw new Error('User ID is undefined.');
     }

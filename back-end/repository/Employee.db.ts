@@ -81,3 +81,16 @@ export const getAllEmployees = async () => {
     },
   });
 };
+
+export const deleteEmployeeById = async (employeeId: number) => {
+  try {
+    const deletedEmployee = await prisma.employee.delete({
+      where: { id: employeeId },
+    });
+    return deletedEmployee;
+  } catch (error) {
+    console.error(`Error deleting employee with ID ${employeeId}:`, error);
+    throw new Error("Failed to delete employee.");
+  }
+};
+

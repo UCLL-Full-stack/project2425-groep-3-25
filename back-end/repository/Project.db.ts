@@ -53,31 +53,64 @@ const createProject = async (projectData: ProjectInputWithCategoryName, email: s
   }
 };
 
-const getProjectById = async ({
-  id,
-}: {
-  id: number;
-}): Promise<Project | null> => {
+const getProjectById = async ({ id }: { id: number }): Promise<Project | null> => {
   try {
     const project = await prisma.project.findUnique({
       where: { id },
+      include: {
+        employeeProjects: {
+          include: {
+            employee: true,
+          },
+        },
+        category: true, // Include category details
+      },
     });
-    return project ? Project.from(project) : null;
+
+    if (project) {
+      const projectWithEmployees = {
+        ...Project.from(project),
+        employees: project.employeeProjects.map((ep) => ep.employee),
+        category: project.category ? { id: project.category.id, naam: project.category.naam } : undefined,
+      };
+      return Object.assign(new Project(project), projectWithEmployees);
+    }
+    return null;
   } catch (error) {
-    console.error(error);
-    throw new Error('An error occurred while finding the project by ID');
+    console.error("Error fetching project by ID:", error);
+    throw new Error("An error occurred while retrieving the project.");
   }
 };
 
 const getAllProjects = async (): Promise<Project[]> => {
   try {
-    const projects = await prisma.project.findMany();
-    return projects.map(Project.from);
+    const projects = await prisma.project.findMany({
+      include: {
+        employeeProjects: {
+          include: {
+            employee: true, // Include the employee details
+          },
+        },
+        category: true, // Include category details
+      },
+    });
+
+    return projects.map((project) => {
+      const employees = project.employeeProjects.map((ep) => ep.employee);
+      const category = project.category ? { id: project.category.id, naam: project.category.naam } : undefined;
+      const projectWithEmployees = {
+        ...Project.from(project),
+        employees,
+        category,// Add employees to the response
+      };
+      return Object.assign(new Project(project), projectWithEmployees);
+    });
   } catch (error) {
     console.error(error);
-    throw new Error('An error occurred while retrieving all projects');
+    throw new Error("An error occurred while retrieving all projects");
   }
 };
+
 
 const updateProject = async (
   id: number,
@@ -87,6 +120,7 @@ const updateProject = async (
     const projectExists = await prisma.project.findUnique({
       where: { id },
     });
+
     if (!projectExists) return null;
 
     const updatedProject = await prisma.project.update({
@@ -94,21 +128,23 @@ const updateProject = async (
       data: {
         naam: updatedData.naam,
         beschrijving: updatedData.beschrijving,
-        datum_voltooid: updatedData.datum_voltooid,
-        company: updatedData.bedrijf_id
-          ? { connect: { id: updatedData.bedrijf_id } }
+        datum_voltooid: updatedData.datum_voltooid
+          ? new Date(updatedData.datum_voltooid)
           : undefined,
-        category: updatedData.categorie_id
-          ? { connect: { id: updatedData.categorie_id } }
-          : undefined,
+        categorie_id: updatedData.categorie_id, // Directly update the category ID
+      },
+      include: {
+        category: true, // Include category in the updated response
       },
     });
+
     return Project.from(updatedProject);
   } catch (error) {
-    console.error(error);
-    throw new Error('An error occurred while updating the project');
+    console.error("Error updating project:", error);
+    throw new Error("An error occurred while updating the project.");
   }
 };
+
 
 const deleteProject = async ({
   id,

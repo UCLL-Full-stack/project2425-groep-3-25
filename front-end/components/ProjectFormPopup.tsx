@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createProject } from "@/services/ProjectService";
 import styles from "../styles/ProjectFormPopup.module.css";
+import { fetchCategories, Category } from "@/services/CategoryService";
 
 interface ProjectFormPopupProps {
   show: boolean;
@@ -16,33 +17,34 @@ const ProjectFormPopup: React.FC<ProjectFormPopupProps> = ({
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [completionDate, setCompletionDate] = useState("");
-  const [category, setCategory] = useState(""); // New category field
+  const [categoryId, setCategoryId] = useState<number | "">(""); // Selected category ID
+  const [categories, setCategories] = useState<Category[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
-  if (!show) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
-    if (!name || !description || !completionDate || !category) {
+    if (!name || !description || !completionDate || !categoryId) {
       setError("All fields are required.");
       return;
     }
 
     try {
       setLoading(true);
+      const selectedCategory = categories.find(cat => cat.id === categoryId);
       await createProject({
         naam: name,
         beschrijving: description,
         datum_voltooid: completionDate,
-        categoryName: category,
+        categorie_id: categoryId, // Pass the selected category ID
+        categoryName: selectedCategory ? selectedCategory.naam : "",
       });
       setName("");
       setDescription("");
       setCompletionDate("");
-      setCategory("");
+      setCategoryId("");
       onSuccess(); // Reload projects
       onClose();
     } catch (err: any) {
@@ -51,6 +53,22 @@ const ProjectFormPopup: React.FC<ProjectFormPopupProps> = ({
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const data = await fetchCategories();
+        setCategories(data);
+      } catch (err) {
+        console.error("Failed to fetch categories:", err);
+        setError("Failed to load categories. Please try again later.");
+      }
+    };
+
+    if (show) loadCategories();
+  }, [show]);
+
+  if (!show) return null;
 
   return (
     <div className={styles.popupOverlay} onClick={onClose}>
@@ -77,13 +95,18 @@ const ProjectFormPopup: React.FC<ProjectFormPopupProps> = ({
             onChange={(e) => setCompletionDate(e.target.value)}
             className={styles.inputField}
           />
-          <input
-            type="text"
-            placeholder="Category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
+          <select
+            value={categoryId}
+            onChange={(e) => setCategoryId(Number(e.target.value))}
             className={styles.inputField}
-          />
+          >
+            <option  value="">Select a Category</option>
+            {categories.map((cat) => (
+              <option className={styles.inputField2} key={cat.id} value={cat.id}>
+                {cat.naam}
+              </option>
+            ))}
+          </select>
           <button
             type="submit"
             className={styles.submitButton}

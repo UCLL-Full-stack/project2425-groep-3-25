@@ -107,8 +107,21 @@ export const fetchMyCompany = async (): Promise<Company> => {
     throw new Error(errorData.error || "Failed to fetch your company");
   }
 
-  return response.json();
+  const company = await response.json();
+
+  console.log("Raw API Response:", company); // Log raw API response
+
+  return {
+    ...company,
+    projects: company.projects.map((project: any) => ({
+      ...project,
+      employees: project.employees || [], // Ensure employees is always an array
+    })),
+  };
 };
+
+
+
 
 // Function to add an employee to a company
 // export const addEmployeeToCompany = async (employeeData: EmployeeInput): Promise<Employee> => {

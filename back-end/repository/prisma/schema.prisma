@@ -47,7 +47,7 @@ model Employee {
   telefoonnummer    String
   company           Company            @relation("CompanyEmployees", fields: [bedrijf_id], references: [id])
   employeeProjects  Employee_Project[]
-  user_id           Int               @unique
+  user_id           Int                @unique
   user              User               @relation(fields: [user_id], references: [id])
   @@map("Employee")
 }

@@ -1,101 +1,121 @@
-import projectService from '../../service/Project.service';
+import projectService from '../../service/Project.service'; 
 import * as projectDb from '../../repository/Project.db';
 import { Project } from '../../domain/model/Project';
-import { ProjectInput } from '../../types';
+
 
 jest.mock('../../repository/Project.db');
 
-describe('Project Service', () => {
+describe('Project Service Tests', () => {
     afterEach(() => {
         jest.clearAllMocks();
     });
 
     describe('getAllProjects', () => {
         it('should return all projects', async () => {
-            const projects: Project[] = [
-                new Project({ id: 1, naam: 'Project A', beschrijving: 'Description A', datum_voltooid: new Date() }),
-                new Project({ id: 2, naam: 'Project B', beschrijving: 'Description B', datum_voltooid: new Date() }),
+            const mockProjects = [
+                new Project({ id: 1, naam: 'Project A', beschrijving: 'Description A', datum_voltooid: new Date('2024-01-01'), categorie_id: 1, bedrijf_id: 1 }),
             ];
-            (projectDb.getAllProjects as jest.Mock).mockResolvedValue(projects);
+            (projectDb.getAllProjects as jest.Mock).mockResolvedValue(mockProjects);
 
             const result = await projectService.getAllProjects();
-            expect(result).toEqual(projects);
+
             expect(projectDb.getAllProjects).toHaveBeenCalledTimes(1);
+            expect(result).toEqual(mockProjects);
         });
     });
 
     describe('getProjectById', () => {
-        it('should return a project by ID', async () => {
-            const project = new Project({ id: 1, naam: 'Project A', beschrijving: 'Description A', datum_voltooid: new Date() });
-            (projectDb.getProjectById as jest.Mock).mockResolvedValue(project);
+        it('should return the correct project', async () => {
+            const mockProject = new Project({ id: 1, naam: 'Project A', beschrijving: 'Description A', datum_voltooid: new Date('2024-01-01'), categorie_id: 1, bedrijf_id: 1 });
+            (projectDb.getProjectById as jest.Mock).mockResolvedValue(mockProject);
 
             const result = await projectService.getProjectById({ id: 1 });
-            expect(result).toEqual(project);
+
             expect(projectDb.getProjectById).toHaveBeenCalledWith({ id: 1 });
+            expect(result).toEqual(mockProject);
         });
 
-        it('should throw an error if the project is not found', async () => {
+        it('should throw an error if the project does not exist', async () => {
             (projectDb.getProjectById as jest.Mock).mockResolvedValue(null);
 
-            await expect(projectService.getProjectById({ id: 1 })).rejects.toThrow('Project not found');
+            await expect(projectService.getProjectById({ id: 999 })).rejects.toThrow('Project not found');
         });
     });
 
     describe('createProject', () => {
-        it('should create a new project', async () => {
-            const projectInput: ProjectInput = {
-                naam: 'Project A',
-                beschrijving: 'Description A',
-                datum_voltooid: new Date(),
-                company_id: 1,
-                category_id: 1,
-            };
-            const createdProject = new Project({ ...projectInput, id: 1 });
-            (projectDb.createProject as jest.Mock).mockResolvedValue(createdProject);
+        it('should create a project', async () => {
+            const projectInput = {
 
-            const result = await projectService.createProject(projectInput);
-            expect(result).toEqual(createdProject);
-            expect(projectDb.createProject).toHaveBeenCalledWith(projectInput);
+                naam: 'New Project',
+
+                beschrijving: 'Project Description',
+
+                datum_voltooid: new Date('2024-01-01'),
+
+                categoryName: 'Category A',
+
+                bedrijf_id: 1, 
+
+            };
+
+            const mockProject = new Project({ id: 1, ...projectInput, categorie_id: 1, bedrijf_id: 1 });
+            (projectDb.createProject as jest.Mock).mockResolvedValue(mockProject);
+
+            const result = await projectService.createProject(projectInput, 'test@example.com');
+
+            expect(projectDb.createProject).toHaveBeenCalledWith(projectInput, 'test@example.com');
+            expect(result).toEqual(mockProject);
         });
 
-        it('should throw an error for invalid project data', async () => {
-            const invalidProjectInput: ProjectInput = { naam: '', beschrijving: '', datum_voltooid: null as any, company_id: 0, category_id: 0 };
+        it('should throw an error for missing fields', async () => {
+            const invalidInput = {
+                naam: '',
+                beschrijving: 'Description',
+                datum_voltooid: '',
+                categoryName: '',
+            };
 
-            await expect(projectService.createProject(invalidProjectInput)).rejects.toThrow('Project name is required.');
+            await expect(projectService.createProject(invalidInput as any, 'test@example.com')).rejects.toThrow(
+                'All fields (name, description, date, and category) are required.'
+            );
         });
     });
 
     describe('updateProject', () => {
-        it('should update an existing project', async () => {
-            const updatedData: Partial<ProjectInput> = { naam: 'Updated Project A', beschrijving: 'Description A', datum_voltooid: new Date() };
-            const updatedProject = new Project({ id: 1, naam: 'Updated Project A', beschrijving: 'Description A', datum_voltooid: new Date() });
-            (projectDb.updateProject as jest.Mock).mockResolvedValue(updatedProject);
+        it('should update the project successfully', async () => {
+            const updatedData = { naam: 'Updated Project', beschrijving: 'Updated Description' };
+            const mockUpdatedProject = new Project({ id: 1, ...updatedData, datum_voltooid: new Date('2024-01-01'), categorie_id: 1, bedrijf_id: 1 });
+
+            (projectDb.updateProject as jest.Mock).mockResolvedValue(mockUpdatedProject);
 
             const result = await projectService.updateProject(1, updatedData);
-            expect(result).toEqual(updatedProject);
+
             expect(projectDb.updateProject).toHaveBeenCalledWith(1, updatedData);
+            expect(result).toEqual(mockUpdatedProject);
         });
 
-        it('should throw an error if the project is not found', async () => {
-            (projectDb.updateProject as jest.Mock).mockResolvedValue(null);
+        it('should throw an error for invalid input', async () => {
+            const invalidInput = { naam: '', beschrijving: '' };
 
-            await expect(projectService.updateProject(1, { naam: 'Updated Project A' })).rejects.toThrow('Project description is required.');
+            await expect(projectService.updateProject(1, invalidInput)).rejects.toThrow('Invalid input for updating the project.');
         });
     });
 
     describe('deleteProject', () => {
-        it('should delete a project by ID', async () => {
+        it('should delete the project if it exists', async () => {
             (projectDb.getProjectById as jest.Mock).mockResolvedValue({ id: 1 });
-            (projectDb.deleteProject as jest.Mock).mockResolvedValue(undefined);
+            (projectDb.deleteProject as jest.Mock).mockResolvedValue({ id: 1 });
 
             await projectService.deleteProject({ id: 1 });
+
+            expect(projectDb.getProjectById).toHaveBeenCalledWith({ id: 1 });
             expect(projectDb.deleteProject).toHaveBeenCalledWith({ id: 1 });
         });
 
-        it('should throw an error if the project is not found', async () => {
+        it('should throw an error if the project does not exist', async () => {
             (projectDb.getProjectById as jest.Mock).mockResolvedValue(null);
 
-            await expect(projectService.deleteProject({ id: 1 })).rejects.toThrow('Project not found');
+            await expect(projectService.deleteProject({ id: 999 })).rejects.toThrow('Project not found');
         });
     });
 });

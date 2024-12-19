@@ -80,34 +80,6 @@ const addProjectToCompany = async (
     }
     return updatedCompany;
 };
-// const addEmployeeToCompany = async (companyId: number, email: string, telefoonnummer: string) => {
-//   const user = await userDb.getUserByEmail({ email });
-//   if (!user) {
-//     throw new Error('User with this email does not exist.');
-//     }
-
-//   if (user.id === undefined) {
-//     throw new Error('User ID is undefined.');
-//   }
-//   const existingEmployee = await employeeDb.getEmployeeByUserId(user.id);
-//   if (existingEmployee) {
-//     throw new Error('User is already an employee.');
-//   }
-
-//   const newEmployee = await employeeDb.addEmployeeToCompany(companyId, email, telefoonnummer);
-//   return newEmployee;
-// };
-
-// export const getEmployeesForCompany = async (companyId: number) => {
-//   if (!companyId || isNaN(companyId)) {
-//     throw new Error("Invalid or missing company ID.");
-//   }
-
-//   console.log("Service: Fetching employees for companyId:", companyId);
-
-//   return await employeeDb.getEmployeesByCompanyId(companyId);
-// };
-
 
 
 

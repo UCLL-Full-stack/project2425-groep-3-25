@@ -2,12 +2,12 @@
 import { Employee } from "../domain/model/Employee";
 import * as employeeDb from "../repository/Employee.db";
 
-// Service to delete all employees
+
 export const deleteAllEmployees = async () => {
   return await employeeDb.deleteAllEmployees();
 };
 
-// Service to get all employees
+
 export const getAllEmployees = async () => {
   return await employeeDb.getAllEmployees();
 };
@@ -28,4 +28,9 @@ export const getEmployeesForCompany = async (
   companyId: number
 ): Promise<Employee[]> => {
   return await employeeDb.getEmployeesByCompanyId(companyId);
+};
+
+
+export const deleteEmployee = async (employeeId: number) => {
+  return await employeeDb.deleteEmployeeById(employeeId);
 };

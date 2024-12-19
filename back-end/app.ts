@@ -9,6 +9,7 @@ import projectRoutes from './controller/Project.routes';
 import userRoutes from './controller/User.routes';
 import categoryRoutes from './controller/Category.routes';
 import employeeRoutes from './controller/Employee.Routes';
+import employeeProjectRoutes from './controller/Employee_project.routes';
 import { expressjwt } from 'express-jwt';
 
 const app = express();
@@ -57,6 +58,8 @@ app.use('/projects', projectRoutes);
 app.use('/users', userRoutes);
 app.use("/categories", categoryRoutes);
 app.use("/employees", employeeRoutes);
+app.use('/employeeprojects', employeeProjectRoutes);
+
 
 
 app.get('/status', (req, res) => {

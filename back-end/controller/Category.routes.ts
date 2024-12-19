@@ -3,8 +3,46 @@ import categoryService from "../service/Category.service";
 
 const router = Router();
 
-// Create a new category
-router.post('/', async (req: Request, res: Response, next: NextFunction) => {
+/**
+ * @swagger
+ * /categories:
+ *   post:
+ *     summary: Create a new category
+ *     tags:
+ *       - Categories
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               naam:
+ *                 type: string
+ *                 description: The name of the category
+ *                 example: "Tech"
+ *               beschrijving:
+ *                 type: string
+ *                 description: The description of the category
+ *                 example: "Technology-related topics"
+ *     responses:
+ *       201:
+ *         description: Category created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: number
+ *                 naam:
+ *                   type: string
+ *                 beschrijving:
+ *                   type: string
+ *       400:
+ *         description: Invalid input or category already exists
+ */
+router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { naam, beschrijving } = req.body;
     const newCategory = await categoryService.createCategory({ naam, beschrijving });
@@ -18,7 +56,30 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-// Get all categories
+/**
+ * @swagger
+ * /categories:
+ *   get:
+ *     summary: Get all categories
+ *     tags:
+ *       - Categories
+ *     responses:
+ *       200:
+ *         description: A list of categories
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: number
+ *                   naam:
+ *                     type: string
+ *                   beschrijving:
+ *                     type: string
+ */
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const categories = await categoryService.getAllCategories();
@@ -28,7 +89,37 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-// Get a category by ID
+/**
+ * @swagger
+ * /categories/{id}:
+ *   get:
+ *     summary: Get a category by ID
+ *     tags:
+ *       - Categories
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the category
+ *     responses:
+ *       200:
+ *         description: The requested category
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: number
+ *                 naam:
+ *                   type: string
+ *                 beschrijving:
+ *                   type: string
+ *       404:
+ *         description: Category not found
+ */
 router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const category = await categoryService.getCategoryById(parseInt(req.params.id));
@@ -38,7 +129,37 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-// Update a category
+/**
+ * @swagger
+ * /categories/{id}:
+ *   put:
+ *     summary: Update a category by ID
+ *     tags:
+ *       - Categories
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the category
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               naam:
+ *                 type: string
+ *               beschrijving:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Category updated successfully
+ *       400:
+ *         description: Invalid input
+ */
 router.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const updatedCategory = await categoryService.updateCategory(parseInt(req.params.id), req.body);
@@ -48,7 +169,26 @@ router.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-// Delete a category
+/**
+ * @swagger
+ * /categories/{id}:
+ *   delete:
+ *     summary: Delete a category by ID
+ *     tags:
+ *       - Categories
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the category
+ *     responses:
+ *       204:
+ *         description: Category deleted successfully
+ *       400:
+ *         description: Invalid category ID
+ */
 router.delete("/:id", async (req: Request, res: Response, next: NextFunction) => {
   try {
     await categoryService.deleteCategory(parseInt(req.params.id));

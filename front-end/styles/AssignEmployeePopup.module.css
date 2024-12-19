@@ -4,7 +4,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14,10 +14,10 @@
 .popupContent {
   background: #1e293b;
   padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
   max-width: 500px;
-  width: 100%;
+  width: 90%;
   color: #ffffff;
 }
 
@@ -25,7 +25,7 @@
   font-size: 1.8rem;
   font-weight: bold;
   color: #407ace;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   text-align: center;
 }
 
@@ -43,16 +43,6 @@
 .inputField::placeholder {
   color: #ccc;
 }
-.inputField2 {
-  width: 100%;
-  padding: 0.8rem;
-  margin-bottom: 1rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  background: rgba(255, 255, 255, 0.2);
-  color: #000000;
-}
 
 .submitButton {
   background-color: #407ace;
@@ -62,6 +52,7 @@
   border: none;
   border-radius: 8px;
   font-weight: bold;
+  font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }

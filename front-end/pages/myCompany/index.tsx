@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { jwtDecode } from "jwt-decode";
 import { fetchMyCompany } from "@/services/CompanyService";
 import { fetchCompanyEmployees } from "@/services/EmployeeService";
+import { deleteProject } from "@/services/ProjectService";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProjectList from "@/components/ProjectList";
@@ -10,6 +11,8 @@ import EmployeeList from "@/components/EmployeeList";
 import ProjectFormPopup from "@/components/ProjectFormPopup";
 import EmployeeFormPopup from "../../components/EmployeeFormPopup"; // Popup form for employees
 import styles from "../../styles/MyCompany.module.css";
+import ProjectDetailsPopup from "@/components/ProjectDetailsPopup";
+import AssignEmployeePopup from "@/components/AssignEmployeePopup";
 
 interface DecodedToken {
   role: string;
@@ -33,6 +36,10 @@ const MyCompany = () => {
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [showEmployeeModal, setShowEmployeeModal] = useState(false);
   const [employees, setEmployees] = useState<any[]>([]);
+  const [selectedProject, setSelectedProject] = useState<any | null>(null);
+  const [showProjectDetailsModal, setShowProjectDetailsModal] = useState(false);
+  const [showAssignEmployeePopup, setShowAssignEmployeePopup] = useState(false);
+
 
   const loadCompany = async () => {
     try {
@@ -40,7 +47,10 @@ const MyCompany = () => {
       const employeeData = await fetchCompanyEmployees();
       const normalizedData: Company = {
         ...companyData,
-        projects: companyData.projects || [],
+       projects: (companyData.projects || []).map((project: any) => ({
+        ...project,
+        employees: project.employees || [],
+      })),
         employees: companyData.employees || [],
       };
       setEmployees(employeeData);
@@ -67,6 +77,41 @@ const MyCompany = () => {
 
     loadCompany();
   }, [router]);
+
+  const handleEditProject = (project: any) => {
+    setSelectedProject(project);
+    setShowProjectDetailsModal(true); // Open ProjectDetailsPopup
+  };
+
+  const handleProjectUpdated = async () => {
+    await loadCompany(); // Reload the company and its projects
+    setShowProjectDetailsModal(false);
+  };
+
+  const handleProjectDeleted = async (projectId: number) => {
+    try {
+      await deleteProject(projectId);
+      await loadCompany(); // Refresh company data after deletion
+    } catch (error) {
+      console.error("Failed to delete project", error);
+    }
+  };
+
+  const handleAddEmployeeToProject = (project: any) => {
+    setSelectedProject(project);
+    setShowAssignEmployeePopup(true);
+  };
+
+  const handleEmployeeDeleted = async () => {
+    try {
+      await loadCompany(); // Reload the company and employees after deletion
+    } catch (error) {
+      console.error("Failed to reload employees", error);
+    }
+  };
+
+
+
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p className={styles.error}>{error}</p>;
@@ -97,7 +142,26 @@ const MyCompany = () => {
                   Create New Project
                 </button>
               </div>
-              <ProjectList projects={company.projects} />
+              <ProjectList
+                projects={company.projects.map((project) => ({
+                  ...project,
+                  category: project.category || { id: 0, naam: "No category" }, // Ensure category is always defined
+                  employees: project.employees || [], // Ensure employees is always an array
+                }))} 
+                  onEditProject={handleEditProject}
+                  onDeleteProject={handleProjectDeleted}
+                  onAddEmployeeToProject={handleAddEmployeeToProject}
+                />
+                {selectedProject && (
+                  <ProjectDetailsPopup
+                    show={showProjectDetailsModal}
+                    onClose={() => setShowProjectDetailsModal(false)}
+                    onProjectUpdated={handleProjectUpdated}
+                   
+                    project={selectedProject}
+                    
+                  />
+                )}
             </div>
 
             {/* Employees Section */}
@@ -126,7 +190,14 @@ const MyCompany = () => {
             show={showEmployeeModal}
             onClose={() => setShowEmployeeModal(false)}
             onSuccess={loadCompany}
-          />
+            />
+            
+          <AssignEmployeePopup
+              show={showAssignEmployeePopup}
+              onClose={() => setShowAssignEmployeePopup(false)}
+              projectId={selectedProject?.id || 0}
+              employees={employees}
+            />
         </>
       )}
       </main>

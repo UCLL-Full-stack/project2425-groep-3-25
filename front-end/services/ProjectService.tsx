@@ -1,11 +1,20 @@
 import useSWR from "swr";
 
 // Interfaces for Project and Employee Data
+export interface Employee {
+  id: number;
+  naam: string;
+  email: string;
+  role?: string; // Role in the project, if applicable
+}
+
 export interface ProjectInput {
   naam: string;
   beschrijving: string;
   datum_voltooid: string; // Format: YYYY-MM-DD
-  categoryName: string; // New: Pass category name instead of ID
+  categoryName: string;
+  employees?: Employee[]
+  categorie_id?: number; // Add this if it's optional
 }
 
 export interface Project extends ProjectInput {
@@ -59,8 +68,15 @@ export const fetchProjects = async (): Promise<Project[]> => {
     throw new Error(errorData.error || "Failed to fetch projects");
   }
 
-  return response.json();
+  const projects = await response.json();
+
+  return projects.map((project: any) => ({
+    ...project,
+    employees: project.employees || [], // Ensure employees is always an array
+  }));
 };
+
+
 
 // Fetch a single project by ID
 export const fetchProjectById = async (id: number): Promise<Project> => {
@@ -192,3 +208,4 @@ export const useProjects = () => {
     isError: error,
   };
 };
+

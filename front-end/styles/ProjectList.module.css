@@ -31,6 +31,65 @@
   background: rgba(255, 255, 255, 0.05);
 }
 
+.cardActions {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.editButton {
+  background-color: #407ace;
+  color: #ffffff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.editButton:hover {
+  background-color: #365d9e;
+}
+
+.deleteButton {
+  background-color: #e63946;
+  color: #ffffff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.deleteButton:hover {
+  background-color: #c93036;
+}
+
+.addEmployeeButton {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background-color: #38b000; /* Green for "Add Employee to Project" */
+  color: #ffffff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.addEmployeeButton:hover {
+  background-color: #2f8c00;
+}
+
 .projectCard:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
@@ -54,7 +113,7 @@
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
   font-weight: bold;
-  color: #407ace;
+  /* color: #407ace; */
   background: transparent;
   border: 2px solid #407ace;
   border-radius: 8px;
@@ -63,7 +122,17 @@
 }
 
 .projectCard button:hover {
-  background-color: #407ace;
+  /* background-color: #407ace; */
   color: #ffffff;
   transform: scale(1.05);
+}
+.employeeList {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+}
+
+.employeeItem {
+  font-size: 0.9rem;
+  color: #e0e0e0;
 }

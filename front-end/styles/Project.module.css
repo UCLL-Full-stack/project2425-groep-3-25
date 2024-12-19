@@ -1,12 +1,12 @@
 .projectPage {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(180deg, #111827, #1e293b);
+  background: linear-gradient(180deg, #0f172a, #1e293b);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #ffffff;
-  margin-top: 80px;
+  color: #f1f5f9;
+  padding-top: 80px;
 }
 
 .main {
@@ -24,14 +24,15 @@
 
 .heroTitle {
   font-size: 3rem;
-  font-weight: bold;
-  color: #407ace;
+  font-weight: 700;
+  color: #60a5fa;
   margin-bottom: 1rem;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 .heroSubtitle {
   font-size: 1.2rem;
-  color: #e0e0e0;
+  color: #94a3b8;
   max-width: 600px;
 }
 
@@ -43,29 +44,30 @@
   max-width: 500px;
   margin-bottom: 4rem;
   padding: 2rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(17, 24, 39, 0.8);
   border-radius: 16px;
   backdrop-filter: blur(10px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
 }
 
 .inputField {
   width: 100%;
   padding: 0.8rem;
   margin-bottom: 1rem;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   font-size: 1rem;
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  background: rgba(31, 41, 55, 0.8);
+  color: #e2e8f0;
+  outline: none;
 }
 
 .inputField::placeholder {
-  color: #cccccc;
+  color: #9ca3af;
 }
 
 .submitButton {
-  background-color: #407ace; 
+  background-color: #3b82f6;
   color: #ffffff;
   padding: 0.8rem 1.5rem;
   font-size: 1.1rem;
@@ -73,12 +75,13 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 4px 10px rgba(64, 122, 206, 0.5); 
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.5);
 }
 
 .submitButton:hover {
-  background-color: #365d9e; 
+  background-color: #2563eb;
+  transform: scale(1.05);
 }
 
 .projectGrid {
@@ -87,27 +90,26 @@
   gap: 2rem;
   width: 100%;
   max-width: 1200px;
-  
 }
 
 .projectCard {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(31, 41, 55, 0.9);
   padding: 1.5rem;
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(8px);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  color: #ffffff;
+  color: #f1f5f9;
 }
 
 .projectCard:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
 }
 
 .projectCard h2 {
   font-size: 1.6rem;
-  color: #407ace; 
+  color: #60a5fa;
   margin-bottom: 0.5rem;
 }
 
@@ -115,24 +117,39 @@
   font-size: 1rem;
   line-height: 1.5;
   margin-bottom: 1rem;
-  color: #e0e0e0;
+  color: #cbd5e1;
+}
+
+.employeeList {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.employeeItem {
+  font-size: 0.9rem;
+  color: #e2e8f0;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
 }
 
 .projectCard button {
   margin-top: auto;
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1.2rem;
   font-size: 0.9rem;
   font-weight: bold;
-  color: #407ace; 
+  color: #3b82f6;
   background: transparent;
-  border: 2px solid #407ace; 
+  border: 2px solid #3b82f6;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s, transform 0.2s;
 }
 
 .projectCard button:hover {
-  background-color: #407ace; 
+  background-color: #3b82f6;
   color: #ffffff;
   transform: scale(1.05);
 }

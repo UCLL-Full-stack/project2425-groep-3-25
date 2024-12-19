@@ -15,7 +15,7 @@ const getProjectById = async ({ id }: { id: number }): Promise<Project | null> =
 };
 
 interface ProjectInputWithCategoryName extends Omit<ProjectInput, "categorie_id"> {
-  categoryName: string; // Accept category name instead of ID
+  categoryName: string; 
 }
 
 const createProject = async (projectData: ProjectInputWithCategoryName, email: string) => {
@@ -28,16 +28,17 @@ const createProject = async (projectData: ProjectInputWithCategoryName, email: s
   
 
 const updateProject = async (
-    id: number,
-    updatedData: Partial<ProjectInput>
+  id: number,
+  updatedData: Partial<ProjectInput>
 ): Promise<Project | null> => {
-    validateProjectData(updatedData as ProjectInput);
-    const updatedProject = await projectDb.updateProject(id, updatedData);
-    if (!updatedProject) {
-        throw new Error('Project not found or could not be updated');
-    }
-    return updatedProject;
+  
+  if (!updatedData.naam?.trim() && !updatedData.beschrijving?.trim()) {
+    throw new Error("Invalid input for updating the project.");
+  }
+
+  return await projectDb.updateProject(id, updatedData);
 };
+
 
 const deleteProject = async ({ id }: { id: number }): Promise<void> => {
     const projectExists = await projectDb.getProjectById({ id });

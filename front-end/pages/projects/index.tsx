@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import Header from "../../components/Header";
-import {
-  fetchProjects,
-  createProject,
-  Project,
-  ProjectInput,
-} from "@/services/ProjectService";
+import { fetchProjects, createProject, Project, ProjectInput } from "@/services/ProjectService";
 import styles from "@/styles/Project.module.css";
 import Footer from "@/components/Footer";
 
@@ -16,7 +11,8 @@ const ProjectsPage: React.FC = () => {
     naam: "",
     beschrijving: "",
     datum_voltooid: "",
-    categoryName: "", // Add the missing categoryName property
+    categoryName: "",
+    employees: []
   });
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,11 +41,7 @@ const ProjectsPage: React.FC = () => {
   };
 
   const handleAddProject = async () => {
-    if (
-      !newProject.naam ||
-      !newProject.beschrijving ||
-      !newProject.datum_voltooid
-    ) {
+    if (!newProject.naam || !newProject.beschrijving || !newProject.datum_voltooid) {
       setError("All fields are required.");
       return;
     }
@@ -81,13 +73,9 @@ const ProjectsPage: React.FC = () => {
           <section className={styles.hero}>
             <h1 className={styles.heroTitle}>Our Projects</h1>
             <p className={styles.heroSubtitle}>
-              Explore our collaborative projects and join us in making a
-              difference.
+              Explore our collaborative projects and join us in making a difference.
             </p>
           </section>
-
-          
-          
 
           {isLoading ? (
             <p className={styles.loadingText}>Loading projects...</p>
@@ -100,9 +88,27 @@ const ProjectsPage: React.FC = () => {
                   <h2>{project.naam}</h2>
                   <p>Description: {project.beschrijving}</p>
                   <p>
-                    Completion Date:{" "}
-                    {new Date(project.datum_voltooid).toLocaleDateString()}
+                    Completion Date: {new Date(project.datum_voltooid).toLocaleDateString()}
                   </p>
+
+                  {/* Category Section */}
+                  <p className={styles.projectCategory}>
+                    Category: {project.category.naam || "No category assigned"}
+                  </p>
+
+                  {/* Assigned Employees Section */}
+                  <h3>Assigned Employees:</h3>
+                  {project.employees && project.employees.length > 0 ? (
+                    <ul className={styles.employeeList}>
+                      {project.employees.map((employee) => (
+                        <li key={employee.id} className={styles.employeeItem}>
+                          {employee.naam}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No employees assigned to this project.</p>
+                  )}
                 </div>
               ))}
             </div>

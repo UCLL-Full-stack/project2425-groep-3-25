@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR  from "swr";
 
 // Employee Interface
 export interface Employee {
@@ -82,12 +82,30 @@ export const addEmployeeToCompany = async (
   return response.json();
 };
 
+export const deleteEmployeeFromCompany = async (employeeId: number): Promise<void> => {
+  const token = sessionStorage.getItem("token");
+  if (!token) throw new Error("User not authenticated");
+
+  const response = await fetch(`${API_BASE_URL}/employees/${employeeId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || "Failed to delete employee");
+  }
+};
+
 // Hook to Fetch Employees with SWR
 export const useCompanyEmployees = () => {
   const { data, error } = useSWR<Employee[]>(
     `${API_BASE_URL}/employees/employees`,
     fetcher
   );
+
 
   return {
     employees: data,
